@@ -453,13 +453,16 @@ function renderRodape() {
     footer.className =
         "bio-footer";
 
-    footer.textContent =
-        "Criado com BioPro";
+    const texto =
+        document.createElement("span");
+
+    texto.textContent =
+        "Criado by Biopro (62)99193-8647";
+
+    footer.appendChild(texto);
 
     return footer;
-
 }
-
 
 /* ========================================
    CONTROLADOR DE COMPONENTES
