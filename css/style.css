@@ -1,0 +1,31 @@
+/* ========================================
+   BIOPRO
+   STYLE PRINCIPAL
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f6f0;
+    color: #26352d;
+    min-height: 100vh;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
