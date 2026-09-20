@@ -6,6 +6,35 @@
 
 
 /* ========================================
+   ÍCONES
+   ======================================== */
+
+const BIOPRO_ICONS = {
+
+    whatsapp: "◉",
+
+    instagram: "◎",
+
+    facebook: "f",
+
+    tiktok: "♪",
+
+    servicos: "✦",
+
+    mapa: "⌖",
+
+    telefone: "☎",
+
+    site: "⌂",
+
+    agenda: "▣",
+
+    contato: "✉"
+
+};
+
+
+/* ========================================
    RENDERIZAR LINKS
    ======================================== */
 
@@ -27,26 +56,56 @@ function renderizarLinks(lista) {
                     document.createElement("a");
 
 
-                /* Classe */
-
                 link.className =
                     "bio-link";
 
-
-                /* Endereço */
 
                 link.href =
                     linkConfig.url || "#";
 
 
-                /* Nome */
+                /* =========================
+                   ÍCONE
+                   ========================= */
 
-                link.textContent =
+                if (linkConfig.icone) {
+
+                    const icone =
+                        document.createElement("span");
+
+                    icone.className =
+                        "bio-link-icon";
+
+                    icone.textContent =
+                        BIOPRO_ICONS[
+                            linkConfig.icone
+                        ] || "•";
+
+                    link.appendChild(icone);
+
+                }
+
+
+                /* =========================
+                   TEXTO
+                   ========================= */
+
+                const texto =
+                    document.createElement("span");
+
+                texto.className =
+                    "bio-link-text";
+
+                texto.textContent =
                     linkConfig.nome ||
                     "Link";
 
+                link.appendChild(texto);
 
-                /* Links externos */
+
+                /* =========================
+                   LINK EXTERNO
+                   ========================= */
 
                 if (
                     linkConfig.url &&
@@ -60,18 +119,6 @@ function renderizarLinks(lista) {
 
                     link.rel =
                         "noopener noreferrer";
-
-                }
-
-
-                /* Ícone */
-
-                if (
-                    linkConfig.icone
-                ) {
-
-                    link.dataset.icon =
-                        linkConfig.icone;
 
                 }
 
