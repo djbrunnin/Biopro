@@ -91,11 +91,22 @@ function componenteAtivo(nome) {
 
 function aplicarTema(tema) {
 
+    if (
+        typeof aplicarTemaCompleto ===
+        "function"
+    ) {
+
+        aplicarTemaCompleto(
+            tema || "botanic"
+        );
+
+        return;
+    }
+
+
     document.body.dataset.theme =
         tema || "botanic";
-
 }
-
 
 /* ========================================
    ATUALIZAR TÍTULO
