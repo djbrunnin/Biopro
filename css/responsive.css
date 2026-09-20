@@ -1,0 +1,31 @@
+/* ========================================
+   BIOPRO
+   RESPONSIVIDADE
+   ======================================== */
+
+/* Base: celular */
+#app {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 16px;
+}
+
+/* Tablets */
+@media (min-width: 768px) {
+
+    #app {
+        padding: 40px 24px;
+    }
+
+}
+
+/* Computadores */
+@media (min-width: 1024px) {
+
+    #app {
+        max-width: 720px;
+        padding: 50px 24px;
+    }
+
+}
