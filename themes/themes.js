@@ -7,6 +7,7 @@
 const BIOPRO_THEMES = {
 
     botanic: {
+
         nome: "Botanic",
 
         cores: {
@@ -21,28 +22,103 @@ const BIOPRO_THEMES = {
         },
 
         fontes: {
-            principal: "Arial, sans-serif"
+            principal:
+                "Arial, sans-serif"
+        },
+
+        estilo: {
+            raio: "16px",
+            sombra:
+                "0 8px 25px rgba(0,0,0,0.06)"
         }
+
     },
 
 
     luxury: {
+
         nome: "Luxury",
 
         cores: {
-            background: "#f5f2ed",
+            background: "#f4f1eb",
             surface: "#ffffff",
             primary: "#302d2a",
             primaryDark: "#1f1d1b",
             secondary: "#b99a5b",
             text: "#292623",
             textLight: "#746e68",
-            border: "#ded8cf"
+            border: "#ddd6ca"
         },
 
         fontes: {
-            principal: "Georgia, serif"
+            principal:
+                "Georgia, serif"
+        },
+
+        estilo: {
+            raio: "12px",
+            sombra:
+                "0 10px 30px rgba(0,0,0,0.08)"
         }
+
+    },
+
+
+    romantic: {
+
+        nome: "Romantic",
+
+        cores: {
+            background: "#faf4f3",
+            surface: "#ffffff",
+            primary: "#9b7375",
+            primaryDark: "#7d595c",
+            secondary: "#c9a3a5",
+            text: "#443637",
+            textLight: "#806f70",
+            border: "#eadbdc"
+        },
+
+        fontes: {
+            principal:
+                "Georgia, serif"
+        },
+
+        estilo: {
+            raio: "20px",
+            sombra:
+                "0 8px 25px rgba(120,80,80,0.08)"
+        }
+
+    },
+
+
+    barber: {
+
+        nome: "Barber",
+
+        cores: {
+            background: "#eeeeeb",
+            surface: "#ffffff",
+            primary: "#252525",
+            primaryDark: "#111111",
+            secondary: "#9a7b4f",
+            text: "#222222",
+            textLight: "#686868",
+            border: "#d8d8d4"
+        },
+
+        fontes: {
+            principal:
+                "Arial, sans-serif"
+        },
+
+        estilo: {
+            raio: "8px",
+            sombra:
+                "0 8px 20px rgba(0,0,0,0.08)"
+        }
+
     }
 
 };
@@ -105,6 +181,16 @@ function aplicarTemaCompleto(nomeTema) {
     root.style.setProperty(
         "--font-main",
         tema.fontes.principal
+    );
+
+    root.style.setProperty(
+        "--radius-medium",
+        tema.estilo.raio
+    );
+
+    root.style.setProperty(
+        "--shadow-soft",
+        tema.estilo.sombra
     );
 
 
