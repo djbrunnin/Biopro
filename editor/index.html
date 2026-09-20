@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BioPro Editor</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <header class="editor-header">
+
+        <h1>BioPro</h1>
+
+        <span>
+            Editor
+        </span>
+
+    </header>
+
+
+    <main class="editor">
+
+        <!-- ==========================
+             PERFIL
+             ========================== -->
+
+        <section class="editor-card">
+
+            <h2>Perfil</h2>
+
+            <label>
+                Nome
+
+                <input
+                    id="nome"
+                    type="text"
+                    placeholder="Nome do cliente"
+                >
+
+            </label>
+
+
+            <label>
+                Descrição
+
+                <textarea
+                    id="descricao"
+                    placeholder="Descrição do negócio"
+                ></textarea>
+
+            </label>
+
+        </section>
+
+
+        <!-- ==========================
+             TEMA
+             ========================== -->
+
+        <section class="editor-card">
+
+            <h2>Tema</h2>
+
+            <select id="tema">
+
+                <option value="botanic">
+                    Botanic
+                </option>
+
+                <option value="luxury">
+                    Luxury
+                </option>
+
+                <option value="romantic">
+                    Romantic
+                </option>
+
+                <option value="barber">
+                    Barber
+                </option>
+
+            </select>
+
+        </section>
+
+
+        <!-- ==========================
+             CONTATO
+             ========================== -->
+
+        <section class="editor-card">
+
+            <h2>Contato</h2>
+
+
+            <label>
+
+                WhatsApp
+
+                <input
+                    id="whatsapp"
+                    type="text"
+                    placeholder="Número do WhatsApp"
+                >
+
+            </label>
+
+
+            <label>
+
+                Instagram
+
+                <input
+                    id="instagram"
+                    type="text"
+                    placeholder="@instagram"
+                >
+
+            </label>
+
+        </section>
+
+
+        <!-- ==========================
+             LOCALIZAÇÃO
+             ========================== -->
+
+        <section class="editor-card">
+
+            <h2>Localização</h2>
+
+
+            <label>
+
+                Endereço
+
+                <input
+                    id="endereco"
+                    type="text"
+                    placeholder="Endereço"
+                >
+
+            </label>
+
+
+            <label>
+
+                Link do mapa
+
+                <input
+                    id="mapa"
+                    type="text"
+                    placeholder="Link Google Maps"
+                >
+
+            </label>
+
+        </section>
+
+
+        <!-- ==========================
+             AÇÕES
+             ========================== -->
+
+        <section class="editor-actions">
+
+            <button
+                id="salvar"
+                type="button"
+            >
+
+                Salvar configuração
+
+            </button>
+
+
+            <button
+                id="visualizar"
+                type="button"
+            >
+
+                Visualizar página
+
+            </button>
+
+        </section>
+
+
+        <div
+            id="mensagem"
+            class="mensagem"
+        ></div>
+
+    </main>
+
+
+    <script
+        src="editor.js"
+    ></script>
+
+</body>
+
+</html>
