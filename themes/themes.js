@@ -56,7 +56,7 @@ function aplicarTemaCompleto(nomeTema) {
 
     const tema =
         BIOPRO_THEMES[nomeTema] ||
-        BIOPRO_THEMES.botanic;
+        BIOPRO_THEMES.luxury;
 
     const root =
         document.documentElement;
