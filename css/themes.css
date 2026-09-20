@@ -1,0 +1,33 @@
+/* ========================================
+   BIOPRO
+   SISTEMA DE TEMAS
+   ======================================== */
+
+:root {
+    /* Cores */
+    --color-background: #f8f6f0;
+    --color-surface: #ffffff;
+    --color-primary: #66796b;
+    --color-primary-dark: #4f6255;
+    --color-secondary: #c8a96b;
+    --color-text: #26352d;
+    --color-text-light: #68736c;
+    --color-border: #e5e0d5;
+
+    /* Tipografia */
+    --font-main: Arial, sans-serif;
+
+    /* Bordas */
+    --radius-small: 10px;
+    --radius-medium: 16px;
+    --radius-large: 24px;
+
+    /* Sombras */
+    --shadow-soft: 0 8px 25px rgba(0, 0, 0, 0.06);
+
+    /* Espaçamento */
+    --space-small: 8px;
+    --space-medium: 16px;
+    --space-large: 24px;
+    --space-xl: 40px;
+}
