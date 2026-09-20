@@ -4,20 +4,38 @@
    MOTOR PRINCIPAL
    ======================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    // Verifica se a configuração do cliente existe
-    if (typeof BIOPRO_CONFIG === "undefined") {
+/* ========================================
+   INICIAR BIOPRO
+   ======================================== */
+
+function iniciarAplicacao() {
+
+    /* ================================
+       VERIFICAR CONFIGURAÇÃO
+       ================================ */
+
+    if (
+        typeof BIOPRO_CONFIG ===
+        "undefined"
+    ) {
 
         console.error(
             "Configuração do BioPro não encontrada."
         );
 
         return;
+
     }
 
-    // Local onde a página será montada
-    const app = document.getElementById("app");
+
+    /* ================================
+       LOCAL DA APLICAÇÃO
+       ================================ */
+
+    const app =
+        document.getElementById("app");
+
 
     if (!app) {
 
@@ -26,45 +44,78 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         return;
+
     }
 
-    // Aplica o tema escolhido pelo cliente
+
+    /* ================================
+       LIMPAR APLICAÇÃO
+       ================================ */
+
+    app.innerHTML = "";
+
+
+    /* ================================
+       APLICAR TEMA
+       ================================ */
+
     aplicarTema(
         BIOPRO_CONFIG.tema
     );
 
-    // Obtém a ordem dos componentes
+
+    /* ================================
+       ORDEM DOS COMPONENTES
+       ================================ */
+
     const ordem =
         BIOPRO_CONFIG.ordem || [];
 
-    // Percorre os componentes
-    ordem.forEach(componente => {
 
-        // Verifica se o componente está ativo
-        if (!componenteAtivo(componente)) {
-            return;
+    /* ================================
+       RENDERIZAR
+       ================================ */
+
+    ordem.forEach(
+        componente => {
+
+            if (
+                !componenteAtivo(
+                    componente
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const elemento =
+                renderizarComponente(
+                    componente,
+                    BIOPRO_CONFIG
+                );
+
+
+            if (elemento) {
+
+                app.appendChild(
+                    elemento
+                );
+
+            }
+
         }
+    );
 
-        // Cria o componente
-        const elemento =
-            renderizarComponente(
-                componente,
-                BIOPRO_CONFIG
-            );
 
-        // Adiciona na página
-        if (elemento) {
+    /* ================================
+       TÍTULO
+       ================================ */
 
-            app.appendChild(elemento);
-
-        }
-
-    });
-
-    // Atualiza o título da página
     atualizarTitulo();
 
-});
+}
 
 
 /* ========================================
@@ -73,12 +124,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function componenteAtivo(nome) {
 
-    if (!BIOPRO_CONFIG.componentes) {
+    if (
+        !BIOPRO_CONFIG.componentes
+    ) {
+
         return false;
+
     }
 
+
     return (
-        BIOPRO_CONFIG.componentes[nome]
+        BIOPRO_CONFIG
+            .componentes[nome]
         === true
     );
 
@@ -101,21 +158,25 @@ function aplicarTema(tema) {
         );
 
         return;
+
     }
 
 
     document.body.dataset.theme =
         tema || "botanic";
+
 }
 
+
 /* ========================================
-   ATUALIZAR TÍTULO
+   TÍTULO
    ======================================== */
 
 function atualizarTitulo() {
 
     const nome =
         BIOPRO_CONFIG.perfil?.nome;
+
 
     if (nome) {
 
