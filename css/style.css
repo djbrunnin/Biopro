@@ -427,3 +427,151 @@ img {
 .bio-social a:hover {
     color:
         var(--color-primary
+
+/* ========================================
+   BIOPRO
+   ANIMAÇÕES
+   ======================================== */
+
+
+/* ========================================
+   ENTRADA DA PÁGINA
+   ======================================== */
+
+#app {
+    animation:
+        biopro-page-in 0.7s ease both;
+}
+
+
+@keyframes biopro-page-in {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* ========================================
+   ENTRADA DOS COMPONENTES
+   ======================================== */
+
+.bio-profile,
+.bio-links,
+.bio-highlight,
+.bio-services,
+.bio-portfolio,
+.bio-location,
+.bio-social,
+.bio-footer {
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
+
+}
+
+
+@keyframes biopro-block-in {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* ========================================
+   BOTÕES
+   ======================================== */
+
+.bio-link {
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+.bio-link:hover {
+
+    transform:
+        translateY(-3px);
+
+}
+
+
+.bio-link:active {
+
+    transform:
+        scale(0.97);
+
+}
+
+
+/* ========================================
+   IMAGENS
+   ======================================== */
+
+.bio-highlight img,
+.portfolio-grid img {
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.bio-highlight img:hover,
+.portfolio-grid img:hover {
+
+    transform:
+        scale(1.015);
+
+}
+
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
