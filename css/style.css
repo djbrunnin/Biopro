@@ -1,4 +1,67 @@
+
 /* ========================================
+   ÍCONES DOS LINKS
+   ======================================== */
+
+.bio-link {
+    position: relative;
+}
+
+
+.bio-link-icon {
+
+    position: absolute;
+
+    left: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 26px;
+
+    height: 26px;
+
+    color:
+        var(--color-primary);
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+
+.bio-link-text {
+
+    text-align: center;
+
+    padding:
+        0 35px;
+
+}
+
+
+/* ========================================
+   MICROINTERAÇÃO
+   ======================================== */
+
+.bio-link:hover
+.bio-link-icon {
+
+    transform:
+        scale(1.1);
+
+}
+
+
+.bio-link-icon {
+
+    transition:
+        transform 0.2s ease;
+}/* ========================================
    BIOPRO
    STYLE PRINCIPAL
    ======================================== */
