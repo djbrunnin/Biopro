@@ -20,199 +20,276 @@
 
 </head>
 
-
 <body>
 
-    <header class="editor-header">
+<header class="editor-header">
 
+    <div>
         <h1>BioPro</h1>
+        <span>Editor</span>
+    </div>
 
-        <span>
-            Editor
-        </span>
+    <button
+        id="visualizarTopo"
+        type="button"
+    >
+        Visualizar
+    </button>
 
-    </header>
-
-
-    <main class="editor">
-
-        <!-- ==========================
-             PERFIL
-             ========================== -->
-
-        <section class="editor-card">
-
-            <h2>Perfil</h2>
-
-            <label>
-                Nome
-
-                <input
-                    id="nome"
-                    type="text"
-                    placeholder="Nome do cliente"
-                >
-
-            </label>
+</header>
 
 
-            <label>
-                Descrição
-
-                <textarea
-                    id="descricao"
-                    placeholder="Descrição do negócio"
-                ></textarea>
-
-            </label>
-
-        </section>
+<main class="editor">
 
 
-        <!-- ==========================
-             TEMA
-             ========================== -->
+    <!-- PERFIL -->
 
-        <section class="editor-card">
+    <section class="editor-card">
 
-            <h2>Tema</h2>
+        <h2>Perfil</h2>
 
-            <select id="tema">
+        <label>
+            Nome
 
-                <option value="botanic">
-                    Botanic
-                </option>
-
-                <option value="luxury">
-                    Luxury
-                </option>
-
-                <option value="romantic">
-                    Romantic
-                </option>
-
-                <option value="barber">
-                    Barber
-                </option>
-
-            </select>
-
-        </section>
-
-
-        <!-- ==========================
-             CONTATO
-             ========================== -->
-
-        <section class="editor-card">
-
-            <h2>Contato</h2>
-
-
-            <label>
-
-                WhatsApp
-
-                <input
-                    id="whatsapp"
-                    type="text"
-                    placeholder="Número do WhatsApp"
-                >
-
-            </label>
-
-
-            <label>
-
-                Instagram
-
-                <input
-                    id="instagram"
-                    type="text"
-                    placeholder="@instagram"
-                >
-
-            </label>
-
-        </section>
-
-
-        <!-- ==========================
-             LOCALIZAÇÃO
-             ========================== -->
-
-        <section class="editor-card">
-
-            <h2>Localização</h2>
-
-
-            <label>
-
-                Endereço
-
-                <input
-                    id="endereco"
-                    type="text"
-                    placeholder="Endereço"
-                >
-
-            </label>
-
-
-            <label>
-
-                Link do mapa
-
-                <input
-                    id="mapa"
-                    type="text"
-                    placeholder="Link Google Maps"
-                >
-
-            </label>
-
-        </section>
-
-
-        <!-- ==========================
-             AÇÕES
-             ========================== -->
-
-        <section class="editor-actions">
-
-            <button
-                id="salvar"
-                type="button"
+            <input
+                id="nome"
+                type="text"
+                placeholder="Nome do cliente"
             >
 
-                Salvar configuração
-
-            </button>
+        </label>
 
 
-            <button
-                id="visualizar"
-                type="button"
+        <label>
+            Descrição
+
+            <textarea
+                id="descricao"
+                placeholder="Descrição do negócio"
+            ></textarea>
+
+        </label>
+
+    </section>
+
+
+    <!-- TEMA -->
+
+    <section class="editor-card">
+
+        <h2>Tema</h2>
+
+        <select id="tema">
+
+            <option value="botanic">
+                Botanic
+            </option>
+
+            <option value="luxury">
+                Luxury
+            </option>
+
+            <option value="romantic">
+                Romantic
+            </option>
+
+            <option value="barber">
+                Barber
+            </option>
+
+        </select>
+
+    </section>
+
+
+    <!-- LINKS -->
+
+    <section class="editor-card">
+
+        <h2>Links</h2>
+
+        <div id="linksEditor"></div>
+
+        <button
+            id="adicionarLink"
+            class="button-secondary"
+            type="button"
+        >
+            + Adicionar link
+        </button>
+
+    </section>
+
+
+    <!-- SERVIÇOS -->
+
+    <section class="editor-card">
+
+        <h2>Serviços</h2>
+
+        <div id="servicosEditor"></div>
+
+        <button
+            id="adicionarServico"
+            class="button-secondary"
+            type="button"
+        >
+            + Adicionar serviço
+        </button>
+
+    </section>
+
+
+    <!-- LOCALIZAÇÃO -->
+
+    <section class="editor-card">
+
+        <h2>Localização</h2>
+
+        <label>
+            Endereço
+
+            <input
+                id="endereco"
+                type="text"
+                placeholder="Endereço"
             >
 
-                Visualizar página
-
-            </button>
-
-        </section>
+        </label>
 
 
-        <div
-            id="mensagem"
-            class="mensagem"
-        ></div>
+        <label>
+            Link do mapa
 
-    </main>
+            <input
+                id="mapa"
+                type="text"
+                placeholder="Link Google Maps"
+            >
+
+        </label>
+
+    </section>
 
 
-    <script
-        src="editor.js"
-    ></script>
+    <!-- COMPONENTES -->
+
+    <section class="editor-card">
+
+        <h2>Componentes</h2>
+
+        <div class="componentes-lista">
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compPerfil"
+                >
+                Perfil
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compLinks"
+                >
+                Links
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compDestaque"
+                >
+                Destaque
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compServicos"
+                >
+                Serviços
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compPortfolio"
+                >
+                Portfólio
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compLocalizacao"
+                >
+                Localização
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compRedes"
+                >
+                Redes sociais
+            </label>
+
+
+            <label class="check-item">
+                <input
+                    type="checkbox"
+                    id="compRodape"
+                >
+                Rodapé
+            </label>
+
+        </div>
+
+    </section>
+
+
+    <!-- AÇÕES -->
+
+    <section class="editor-actions">
+
+        <button
+            id="salvar"
+            type="button"
+        >
+            Salvar configuração
+        </button>
+
+
+        <button
+            id="visualizar"
+            type="button"
+        >
+            Visualizar página
+        </button>
+
+    </section>
+
+
+    <div
+        id="mensagem"
+        class="mensagem"
+    ></div>
+
+
+</main>
+
+
+<script
+    src="editor.js"
+></script>
 
 </body>
 
