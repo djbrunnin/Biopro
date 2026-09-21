@@ -1,17 +1,10 @@
-/* ========================================
-   BIOPRO
-   EDITOR
-   ======================================== */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
 body {
-
     font-family:
         Arial,
         sans-serif;
@@ -27,12 +20,9 @@ body {
 }
 
 
-/* ========================================
-   HEADER
-   ======================================== */
+/* HEADER */
 
 .editor-header {
-
     background:
         #ffffff;
 
@@ -40,7 +30,7 @@ body {
         1px solid #e5e0d5;
 
     padding:
-        18px 20px;
+        16px 20px;
 
     display:
         flex;
@@ -51,34 +41,53 @@ body {
     justify-content:
         space-between;
 
-}
+    position:
+        sticky;
 
+    top:
+        0;
+
+    z-index:
+        10;
+}
 
 .editor-header h1 {
-
     font-size:
         22px;
-
 }
 
-
 .editor-header span {
-
     color:
         #66796b;
 
     font-size:
-        14px;
+        13px;
+}
 
+.editor-header button {
+    border:
+        1px solid #66796b;
+
+    background:
+        #ffffff;
+
+    color:
+        #66796b;
+
+    border-radius:
+        10px;
+
+    padding:
+        9px 14px;
+
+    cursor:
+        pointer;
 }
 
 
-/* ========================================
-   EDITOR
-   ======================================== */
+/* CONTAINER */
 
 .editor {
-
     width:
         100%;
 
@@ -89,17 +98,13 @@ body {
         0 auto;
 
     padding:
-        20px 16px 40px;
-
+        20px 16px 50px;
 }
 
 
-/* ========================================
-   CARD
-   ======================================== */
+/* CARDS */
 
 .editor-card {
-
     background:
         #ffffff;
 
@@ -114,27 +119,20 @@ body {
 
     margin-bottom:
         16px;
-
 }
 
-
 .editor-card h2 {
-
     font-size:
         18px;
 
     margin-bottom:
         18px;
-
 }
 
 
-/* ========================================
-   CAMPOS
-   ======================================== */
+/* FORM */
 
 label {
-
     display:
         block;
 
@@ -143,14 +141,11 @@ label {
 
     margin-bottom:
         16px;
-
 }
-
 
 input,
 textarea,
 select {
-
     width:
         100%;
 
@@ -174,27 +169,166 @@ select {
 
     font-size:
         15px;
-
 }
 
-
 textarea {
-
     min-height:
-        100px;
+        90px;
 
     resize:
         vertical;
+}
 
+input:focus,
+textarea:focus,
+select:focus {
+    outline:
+        2px solid #c8a96b;
+
+    outline-offset:
+        1px;
 }
 
 
-/* ========================================
-   AÇÕES
-   ======================================== */
+/* LINK / SERVIÇO */
+
+.editor-item {
+    border:
+        1px solid #e5e0d5;
+
+    border-radius:
+        12px;
+
+    padding:
+        14px;
+
+    margin-bottom:
+        12px;
+
+    background:
+        #faf9f6;
+}
+
+.editor-item-header {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        12px;
+}
+
+.editor-item-header strong {
+    font-size:
+        14px;
+}
+
+.remover {
+    border:
+        0;
+
+    background:
+        transparent;
+
+    color:
+        #9b5555;
+
+    cursor:
+        pointer;
+
+    font-size:
+        13px;
+}
+
+
+/* BOTÕES */
+
+.button-secondary {
+    width:
+        100%;
+
+    border:
+        1px dashed #66796b;
+
+    background:
+        #ffffff;
+
+    color:
+        #66796b;
+
+    border-radius:
+        10px;
+
+    padding:
+        12px;
+
+    cursor:
+        pointer;
+
+    font-weight:
+        600;
+}
+
+
+/* CHECKBOXES */
+
+.componentes-lista {
+    display:
+        grid;
+
+    gap:
+        10px;
+}
+
+.check-item {
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin:
+        0;
+
+    padding:
+        12px;
+
+    border:
+        1px solid #e5e0d5;
+
+    border-radius:
+        10px;
+
+    background:
+        #faf9f6;
+
+    cursor:
+        pointer;
+}
+
+.check-item input {
+    width:
+        18px;
+
+    height:
+        18px;
+
+    margin:
+        0;
+}
+
+
+/* AÇÕES */
 
 .editor-actions {
-
     display:
         flex;
 
@@ -203,12 +337,9 @@ textarea {
 
     gap:
         10px;
-
 }
 
-
 .editor-actions button {
-
     border:
         0;
 
@@ -232,12 +363,9 @@ textarea {
 
     color:
         #ffffff;
-
 }
 
-
 .editor-actions button:last-child {
-
     background:
         #ffffff;
 
@@ -246,16 +374,12 @@ textarea {
 
     border:
         1px solid #66796b;
-
 }
 
 
-/* ========================================
-   MENSAGEM
-   ======================================== */
+/* MENSAGEM */
 
 .mensagem {
-
     text-align:
         center;
 
@@ -265,4 +389,6 @@ textarea {
     font-size:
         14px;
 
+    min-height:
+        20px;
 }
