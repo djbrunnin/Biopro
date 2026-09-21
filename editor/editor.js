@@ -1,13 +1,3 @@
-/* ========================================
-   BIOPRO
-   EDITOR.JS
-   ======================================== */
-
-
-/* ========================================
-   OBTER CLIENTE
-   ======================================== */
-
 const parametros =
     new URLSearchParams(
         window.location.search
@@ -19,45 +9,46 @@ const cliente =
     "cliente-001";
 
 
-/* ========================================
+let CONFIG =
+    null;
+
+
+/* ================================
    ELEMENTOS
-   ======================================== */
+   ================================ */
 
 const nome =
     document.getElementById("nome");
 
-
 const descricao =
     document.getElementById("descricao");
-
 
 const tema =
     document.getElementById("tema");
 
-
-const whatsapp =
-    document.getElementById("whatsapp");
-
-
-const instagram =
-    document.getElementById("instagram");
-
-
 const endereco =
     document.getElementById("endereco");
-
 
 const mapa =
     document.getElementById("mapa");
 
-
 const mensagem =
     document.getElementById("mensagem");
 
+const linksEditor =
+    document.getElementById(
+        "linksEditor"
+    );
 
-/* ========================================
-   CARREGAR CONFIGURAÇÃO
-   ======================================== */
+const servicosEditor =
+    document.getElementById(
+        "servicosEditor"
+    );
+
+
+/* ================================
+   CARREGAR CONFIG
+   ================================ */
 
 async function carregarConfiguracao() {
 
@@ -68,21 +59,27 @@ async function carregarConfiguracao() {
                 `../clientes/${cliente}/config.js`
             );
 
+        if (!resposta.ok) {
+            throw new Error(
+                "Cliente não encontrado."
+            );
+        }
 
         const texto =
             await resposta.text();
 
-
-        const dados =
+        CONFIG =
             extrairConfiguracao(
                 texto
             );
 
+        if (!CONFIG) {
+            throw new Error(
+                "Configuração inválida."
+            );
+        }
 
-        preencherEditor(
-            dados
-        );
-
+        preencherEditor();
 
     } catch (erro) {
 
@@ -93,44 +90,33 @@ async function carregarConfiguracao() {
         mostrarMensagem(
             "Não foi possível carregar o cliente."
         );
-
     }
-
 }
 
 
-/* ========================================
-   EXTRAIR CONFIGURAÇÃO
-   ======================================== */
+/* ================================
+   EXTRAIR CONFIG
+   ================================ */
 
-function extrairConfiguracao(texto) {
+function extrairConfiguracao(
+    texto
+) {
 
     const inicio =
         texto.indexOf(
             "const BIOPRO_CONFIG ="
         );
 
-
     if (
         inicio === -1
     ) {
-
         return null;
-
     }
-
-
-    /*
-       Esta primeira versão usa
-       avaliação controlada do objeto
-       existente.
-    */
 
     const codigo =
         texto.substring(
             inicio
         );
-
 
     const expressao =
         codigo
@@ -139,8 +125,10 @@ function extrairConfiguracao(texto) {
                 ""
             )
             .trim()
-            .replace(/;$/, "");
-
+            .replace(
+                /;$/,
+                ""
+            );
 
     try {
 
@@ -156,92 +144,682 @@ function extrairConfiguracao(texto) {
         );
 
         return null;
-
     }
-
 }
 
 
-/* ========================================
+/* ================================
    PREENCHER EDITOR
-   ======================================== */
+   ================================ */
 
-function preencherEditor(
-    config
-) {
-
-    if (!config) {
-        return;
-    }
-
+function preencherEditor() {
 
     nome.value =
-        config.perfil?.nome ||
+        CONFIG.perfil?.nome ||
         "";
-
 
     descricao.value =
-        config.perfil?.descricao ||
+        CONFIG.perfil?.descricao ||
         "";
-
 
     tema.value =
-        config.tema ||
+        CONFIG.tema ||
         "botanic";
 
-
-    whatsapp.value =
-        encontrarLink(
-            config,
-            "whatsapp"
-        );
-
-
-    instagram.value =
-        config.redes?.instagram ||
-        "";
-
-
     endereco.value =
-        config.localizacao?.endereco ||
+        CONFIG.localizacao?.endereco ||
         "";
-
 
     mapa.value =
-        config.localizacao?.mapa ||
+        CONFIG.localizacao?.mapa ||
         "";
 
+
+    preencherLinks();
+
+    preencherServicos();
+
+    preencherComponentes();
 }
 
 
-/* ========================================
-   ENCONTRAR LINK
-   ======================================== */
+/* ================================
+   LINKS
+   ================================ */
 
-function encontrarLink(
-    config,
-    tipo
-) {
+function preencherLinks() {
+
+    linksEditor.innerHTML =
+        "";
 
     const links =
-        config.links || [];
+        CONFIG.links || [];
 
+    links.forEach(
+        (link, index) => {
 
-    const link =
-        links.find(
-            item =>
-                item.icone === tipo
-        );
-
-
-    return link?.url || "";
-
+            criarEditorLink(
+                link,
+                index
+            );
+        }
+    );
 }
 
 
-/* ========================================
-   MOSTRAR MENSAGEM
-   ======================================== */
+function criarEditorLink(
+    link,
+    index
+) {
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+    item.className =
+        "editor-item";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+    header.className =
+        "editor-item-header";
+
+
+    const titulo =
+        document.createElement(
+            "strong"
+        );
+
+    titulo.textContent =
+        `Link ${index + 1}`;
+
+
+    const remover =
+        document.createElement(
+            "button"
+        );
+
+    remover.className =
+        "remover";
+
+    remover.type =
+        "button";
+
+    remover.textContent =
+        "Remover";
+
+
+    remover.onclick =
+        function () {
+
+            item.remove();
+
+        };
+
+
+    header.appendChild(
+        titulo
+    );
+
+    header.appendChild(
+        remover
+    );
+
+
+    const nomeInput =
+        document.createElement(
+            "input"
+        );
+
+    nomeInput.placeholder =
+        "Nome do botão";
+
+    nomeInput.value =
+        link.nome || "";
+
+
+    const urlInput =
+        document.createElement(
+            "input"
+        );
+
+    urlInput.placeholder =
+        "URL";
+
+    urlInput.value =
+        link.url || "";
+
+
+    const iconeInput =
+        document.createElement(
+            "input"
+        );
+
+    iconeInput.placeholder =
+        "Ícone: whatsapp, instagram...";
+
+    iconeInput.value =
+        link.icone || "";
+
+
+    item.appendChild(
+        header
+    );
+
+    item.appendChild(
+        nomeInput
+    );
+
+    item.appendChild(
+        urlInput
+    );
+
+    item.appendChild(
+        iconeInput
+    );
+
+
+    linksEditor.appendChild(
+        item
+    );
+}
+
+
+/* ================================
+   ADICIONAR LINK
+   ================================ */
+
+document
+    .getElementById(
+        "adicionarLink"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            criarEditorLink(
+                {
+                    nome: "",
+                    url: "",
+                    icone: "",
+                    ativo: true
+                },
+                linksEditor.children.length
+            );
+
+        }
+    );
+
+
+/* ================================
+   SERVIÇOS
+   ================================ */
+
+function preencherServicos() {
+
+    servicosEditor.innerHTML =
+        "";
+
+    const servicos =
+        CONFIG.servicos || [];
+
+    servicos.forEach(
+        (servico, index) => {
+
+            criarEditorServico(
+                servico,
+                index
+            );
+
+        }
+    );
+}
+
+
+function criarEditorServico(
+    servico,
+    index
+) {
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+    item.className =
+        "editor-item";
+
+
+    const header =
+        document.createElement(
+            "div"
+        );
+
+    header.className =
+        "editor-item-header";
+
+
+    const titulo =
+        document.createElement(
+            "strong"
+        );
+
+    titulo.textContent =
+        `Serviço ${index + 1}`;
+
+
+    const remover =
+        document.createElement(
+            "button"
+        );
+
+    remover.className =
+        "remover";
+
+    remover.type =
+        "button";
+
+    remover.textContent =
+        "Remover";
+
+
+    remover.onclick =
+        function () {
+
+            item.remove();
+
+        };
+
+
+    header.appendChild(
+        titulo
+    );
+
+    header.appendChild(
+        remover
+    );
+
+
+    const nomeInput =
+        document.createElement(
+            "input"
+        );
+
+    nomeInput.placeholder =
+        "Nome do serviço";
+
+    nomeInput.value =
+        servico.nome || "";
+
+
+    const descricaoInput =
+        document.createElement(
+            "textarea"
+        );
+
+    descricaoInput.placeholder =
+        "Descrição";
+
+    descricaoInput.value =
+        servico.descricao || "";
+
+
+    item.appendChild(
+        header
+    );
+
+    item.appendChild(
+        nomeInput
+    );
+
+    item.appendChild(
+        descricaoInput
+    );
+
+
+    servicosEditor.appendChild(
+        item
+    );
+}
+
+
+/* ================================
+   ADICIONAR SERVIÇO
+   ================================ */
+
+document
+    .getElementById(
+        "adicionarServico"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            criarEditorServico(
+                {
+                    nome: "",
+                    descricao: "",
+                    ativo: true
+                },
+                servicosEditor.children.length
+            );
+
+        }
+    );
+
+
+/* ================================
+   COMPONENTES
+   ================================ */
+
+function preencherComponentes() {
+
+    const componentes =
+        CONFIG.componentes || {};
+
+
+    document.getElementById(
+        "compPerfil"
+    ).checked =
+        componentes.perfil !== false;
+
+
+    document.getElementById(
+        "compLinks"
+    ).checked =
+        componentes.links !== false;
+
+
+    document.getElementById(
+        "compDestaque"
+    ).checked =
+        componentes.destaque !== false;
+
+
+    document.getElementById(
+        "compServicos"
+    ).checked =
+        componentes.servicos !== false;
+
+
+    document.getElementById(
+        "compPortfolio"
+    ).checked =
+        componentes.portfolio !== false;
+
+
+    document.getElementById(
+        "compLocalizacao"
+    ).checked =
+        componentes.localizacao !== false;
+
+
+    document.getElementById(
+        "compRedes"
+    ).checked =
+        componentes.redes !== false;
+
+
+    document.getElementById(
+        "compRodape"
+    ).checked =
+        componentes.rodape !== false;
+}
+
+
+/* ================================
+   COLETAR LINKS
+   ================================ */
+
+function coletarLinks() {
+
+    const itens =
+        linksEditor.querySelectorAll(
+            ".editor-item"
+        );
+
+    const resultado = [];
+
+
+    itens.forEach(
+        item => {
+
+            const inputs =
+                item.querySelectorAll(
+                    "input"
+                );
+
+            resultado.push({
+
+                nome:
+                    inputs[0]?.value || "",
+
+                url:
+                    inputs[1]?.value || "",
+
+                icone:
+                    inputs[2]?.value || "",
+
+                ativo:
+                    true
+
+            });
+
+        }
+    );
+
+
+    return resultado;
+}
+
+
+/* ================================
+   COLETAR SERVIÇOS
+   ================================ */
+
+function coletarServicos() {
+
+    const itens =
+        servicosEditor.querySelectorAll(
+            ".editor-item"
+        );
+
+    const resultado = [];
+
+
+    itens.forEach(
+        item => {
+
+            const nome =
+                item.querySelector(
+                    "input"
+                );
+
+            const descricao =
+                item.querySelector(
+                    "textarea"
+                );
+
+
+            resultado.push({
+
+                nome:
+                    nome?.value || "",
+
+                descricao:
+                    descricao?.value || "",
+
+                ativo:
+                    true
+
+            });
+
+        }
+    );
+
+
+    return resultado;
+}
+
+
+/* ================================
+   ATUALIZAR CONFIG
+   ================================ */
+
+function atualizarConfiguracao() {
+
+    CONFIG.perfil =
+        CONFIG.perfil || {};
+
+    CONFIG.perfil.nome =
+        nome.value;
+
+    CONFIG.perfil.descricao =
+        descricao.value;
+
+
+    CONFIG.tema =
+        tema.value;
+
+
+    CONFIG.localizacao =
+        CONFIG.localizacao || {};
+
+    CONFIG.localizacao.endereco =
+        endereco.value;
+
+    CONFIG.localizacao.mapa =
+        mapa.value;
+
+
+    CONFIG.links =
+        coletarLinks();
+
+
+    CONFIG.servicos =
+        coletarServicos();
+
+
+    CONFIG.componentes =
+        CONFIG.componentes || {};
+
+
+    CONFIG.componentes.perfil =
+        document.getElementById(
+            "compPerfil"
+        ).checked;
+
+
+    CONFIG.componentes.links =
+        document.getElementById(
+            "compLinks"
+        ).checked;
+
+
+    CONFIG.componentes.destaque =
+        document.getElementById(
+            "compDestaque"
+        ).checked;
+
+
+    CONFIG.componentes.servicos =
+        document.getElementById(
+            "compServicos"
+        ).checked;
+
+
+    CONFIG.componentes.portfolio =
+        document.getElementById(
+            "compPortfolio"
+        ).checked;
+
+
+    CONFIG.componentes.localizacao =
+        document.getElementById(
+            "compLocalizacao"
+        ).checked;
+
+
+    CONFIG.componentes.redes =
+        document.getElementById(
+            "compRedes"
+        ).checked;
+
+
+    CONFIG.componentes.rodape =
+        document.getElementById(
+            "compRodape"
+        ).checked;
+}
+
+
+/* ================================
+   VISUALIZAR
+   ================================ */
+
+function visualizar() {
+
+    window.open(
+        `../?cliente=${cliente}`,
+        "_blank"
+    );
+}
+
+
+document
+    .getElementById(
+        "visualizar"
+    )
+    .addEventListener(
+        "click",
+        visualizar
+    );
+
+
+document
+    .getElementById(
+        "visualizarTopo"
+    )
+    .addEventListener(
+        "click",
+        visualizar
+    );
+
+
+/* ================================
+   SALVAR
+   ================================ */
+
+document
+    .getElementById(
+        "salvar"
+    )
+    .addEventListener(
+        "click",
+        function () {
+
+            atualizarConfiguracao();
+
+            console.log(
+                CONFIG
+            );
+
+            mostrarMensagem(
+                "Configuração atualizada na memória. Salvamento permanente será conectado na próxima etapa."
+            );
+
+        }
+    );
+
+
+/* ================================
+   MENSAGEM
+   ================================ */
 
 function mostrarMensagem(
     texto
@@ -249,49 +827,11 @@ function mostrarMensagem(
 
     mensagem.textContent =
         texto;
-
 }
 
 
-/* ========================================
-   VISUALIZAR
-   ======================================== */
-
-document
-    .getElementById("visualizar")
-    .addEventListener(
-        "click",
-        () => {
-
-            window.open(
-                `../?cliente=${cliente}`,
-                "_blank"
-            );
-
-        }
-    );
-
-
-/* ========================================
-   SALVAR
-   ======================================== */
-
-document
-    .getElementById("salvar")
-    .addEventListener(
-        "click",
-        () => {
-
-            mostrarMensagem(
-                "Configuração preparada."
-            );
-
-        }
-    );
-
-
-/* ========================================
+/* ================================
    INICIAR
-   ======================================== */
+   ================================ */
 
 carregarConfiguracao();
