@@ -3,35 +3,29 @@ const parametros =
         window.location.search
     );
 
-
 const cliente =
     parametros.get("cliente") ||
     "cliente-001";
 
-
 let CONFIG = null;
 
+let PUBLICADO = true;
 
 const nomesComponentes = {
-
     perfil: "Perfil",
-
     links: "Links",
-
     destaque: "Destaque",
-
     servicos: "Serviços",
-
     portfolio: "Portfólio",
-
     localizacao: "Localização",
-
     redes: "Redes sociais",
-
     rodape: "Rodapé"
-
 };
 
+
+/* =========================================
+   ELEMENTOS
+========================================= */
 
 const nome =
     document.getElementById("nome");
@@ -67,48 +61,107 @@ const preview =
     document.getElementById("preview");
 
 
-/* ==================================
-   CARREGAR CLIENTE
-   ================================== */
+/* =========================================
+   VERIFICAR LOGIN
+========================================= */
+
+async function verificarLogin() {
+
+    const {
+        data,
+        error
+    } = await supabaseClient.auth.getSession();
+
+    if (error) {
+
+        console.error(error);
+
+        window.location.href =
+            "./login.html";
+
+        return false;
+    }
+
+    if (!data.session) {
+
+        window.location.href =
+            "./login.html";
+
+        return false;
+    }
+
+    return true;
+}
+
+
+/* =========================================
+   CARREGAR CONFIGURAÇÃO DO SUPABASE
+========================================= */
 
 async function carregarConfiguracao() {
 
+    const logado =
+        await verificarLogin();
+
+    if (!logado) return;
+
     try {
 
-        const resposta =
-            await fetch(
-                `../clientes/${cliente}/config.js`
-            );
+        mostrarMensagem(
+            "Carregando cliente..."
+        );
 
-        if (!resposta.ok) {
-            throw new Error(
-                "Cliente não encontrado."
-            );
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("clients")
+            .select(
+                "id, slug, name, config, published"
+            )
+            .eq("slug", cliente)
+            .maybeSingle();
+
+
+        if (error) {
+            throw error;
         }
 
-        const texto =
-            await resposta.text();
+
+        if (!data) {
+
+            mostrarMensagem(
+                "Cliente não encontrado no Supabase."
+            );
+
+            return;
+        }
+
 
         CONFIG =
-            extrairConfiguracao(
-                texto
-            );
+            data.config || {};
 
-        if (!CONFIG) {
-            throw new Error(
-                "Configuração inválida."
-            );
-        }
+        PUBLICADO =
+            data.published === true;
+
+
+        CONFIG.id =
+            CONFIG.id || data.slug;
+
 
         preencherEditor();
 
         atualizarPreview();
 
+        mostrarMensagem(
+            "Cliente carregado."
+        );
+
+
     } catch (erro) {
 
-        console.error(
-            erro
-        );
+        console.error(erro);
 
         mostrarMensagem(
             "Erro ao carregar cliente."
@@ -119,62 +172,9 @@ async function carregarConfiguracao() {
 }
 
 
-/* ==================================
-   EXTRAIR CONFIG
-   ================================== */
-
-function extrairConfiguracao(
-    texto
-) {
-
-    const inicio =
-        texto.indexOf(
-            "const BIOPRO_CONFIG ="
-        );
-
-    if (inicio === -1) {
-        return null;
-    }
-
-    const codigo =
-        texto.substring(
-            inicio
-        );
-
-    const expressao =
-        codigo
-            .replace(
-                "const BIOPRO_CONFIG =",
-                ""
-            )
-            .trim()
-            .replace(
-                /;$/,
-                ""
-            );
-
-    try {
-
-        return Function(
-            `"use strict";
-             return (${expressao});`
-        )();
-
-    } catch (erro) {
-
-        console.error(
-            erro
-        );
-
-        return null;
-    }
-
-}
-
-
-/* ==================================
-   PREENCHER
-   ================================== */
+/* =========================================
+   PREENCHER EDITOR
+========================================= */
 
 function preencherEditor() {
 
@@ -207,9 +207,9 @@ function preencherEditor() {
 }
 
 
-/* ==================================
+/* =========================================
    LINKS
-   ================================== */
+========================================= */
 
 function preencherLinks() {
 
@@ -238,36 +238,28 @@ function criarEditorLink(
 ) {
 
     const item =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     item.className =
         "editor-item";
 
 
     const header =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     header.className =
         "editor-item-header";
 
 
     const titulo =
-        document.createElement(
-            "strong"
-        );
+        document.createElement("strong");
 
     titulo.textContent =
         `Link ${index + 1}`;
 
 
     const remover =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     remover.className =
         "remover";
@@ -283,19 +275,13 @@ function criarEditorLink(
         () => item.remove();
 
 
-    header.appendChild(
-        titulo
-    );
+    header.appendChild(titulo);
 
-    header.appendChild(
-        remover
-    );
+    header.appendChild(remover);
 
 
     const nomeInput =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
     nomeInput.placeholder =
         "Nome do botão";
@@ -305,9 +291,7 @@ function criarEditorLink(
 
 
     const urlInput =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
     urlInput.placeholder =
         "URL";
@@ -317,9 +301,7 @@ function criarEditorLink(
 
 
     const iconeInput =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
     iconeInput.placeholder =
         "Ícone";
@@ -328,38 +310,21 @@ function criarEditorLink(
         link.icone || "";
 
 
-    item.appendChild(
-        header
-    );
+    item.appendChild(header);
 
-    item.appendChild(
-        nomeInput
-    );
+    item.appendChild(nomeInput);
 
-    item.appendChild(
-        urlInput
-    );
+    item.appendChild(urlInput);
 
-    item.appendChild(
-        iconeInput
-    );
+    item.appendChild(iconeInput);
 
-
-    linksEditor.appendChild(
-        item
-    );
+    linksEditor.appendChild(item);
 
 }
 
 
-/* ==================================
-   NOVO LINK
-   ================================== */
-
 document
-    .getElementById(
-        "adicionarLink"
-    )
+    .getElementById("adicionarLink")
     .addEventListener(
         "click",
         () => {
@@ -378,9 +343,9 @@ document
     );
 
 
-/* ==================================
+/* =========================================
    SERVIÇOS
-   ================================== */
+========================================= */
 
 function preencherServicos() {
 
@@ -409,36 +374,28 @@ function criarEditorServico(
 ) {
 
     const item =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     item.className =
         "editor-item";
 
 
     const header =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     header.className =
         "editor-item-header";
 
 
     const titulo =
-        document.createElement(
-            "strong"
-        );
+        document.createElement("strong");
 
     titulo.textContent =
         `Serviço ${index + 1}`;
 
 
     const remover =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     remover.className =
         "remover";
@@ -454,19 +411,13 @@ function criarEditorServico(
         () => item.remove();
 
 
-    header.appendChild(
-        titulo
-    );
+    header.appendChild(titulo);
 
-    header.appendChild(
-        remover
-    );
+    header.appendChild(remover);
 
 
     const nomeInput =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
     nomeInput.placeholder =
         "Nome";
@@ -476,9 +427,7 @@ function criarEditorServico(
 
 
     const descricaoInput =
-        document.createElement(
-            "textarea"
-        );
+        document.createElement("textarea");
 
     descricaoInput.placeholder =
         "Descrição";
@@ -487,34 +436,19 @@ function criarEditorServico(
         servico.descricao || "";
 
 
-    item.appendChild(
-        header
-    );
+    item.appendChild(header);
 
-    item.appendChild(
-        nomeInput
-    );
+    item.appendChild(nomeInput);
 
-    item.appendChild(
-        descricaoInput
-    );
+    item.appendChild(descricaoInput);
 
-
-    servicosEditor.appendChild(
-        item
-    );
+    servicosEditor.appendChild(item);
 
 }
 
 
-/* ==================================
-   NOVO SERVIÇO
-   ================================== */
-
 document
-    .getElementById(
-        "adicionarServico"
-    )
+    .getElementById("adicionarServico")
     .addEventListener(
         "click",
         () => {
@@ -532,9 +466,9 @@ document
     );
 
 
-/* ==================================
+/* =========================================
    PORTFÓLIO
-   ================================== */
+========================================= */
 
 function preencherPortfolio() {
 
@@ -563,36 +497,28 @@ function criarEditorFoto(
 ) {
 
     const item =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     item.className =
         "editor-item";
 
 
     const header =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     header.className =
         "editor-item-header";
 
 
     const titulo =
-        document.createElement(
-            "strong"
-        );
+        document.createElement("strong");
 
     titulo.textContent =
         `Foto ${index + 1}`;
 
 
     const remover =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     remover.className =
         "remover";
@@ -608,19 +534,13 @@ function criarEditorFoto(
         () => item.remove();
 
 
-    header.appendChild(
-        titulo
-    );
+    header.appendChild(titulo);
 
-    header.appendChild(
-        remover
-    );
+    header.appendChild(remover);
 
 
     const input =
-        document.createElement(
-            "input"
-        );
+        document.createElement("input");
 
     input.placeholder =
         "Caminho da imagem";
@@ -629,30 +549,17 @@ function criarEditorFoto(
         foto || "";
 
 
-    item.appendChild(
-        header
-    );
+    item.appendChild(header);
 
-    item.appendChild(
-        input
-    );
+    item.appendChild(input);
 
-
-    portfolioEditor.appendChild(
-        item
-    );
+    portfolioEditor.appendChild(item);
 
 }
 
 
-/* ==================================
-   NOVA FOTO
-   ================================== */
-
 document
-    .getElementById(
-        "adicionarFoto"
-    )
+    .getElementById("adicionarFoto")
     .addEventListener(
         "click",
         () => {
@@ -666,9 +573,9 @@ document
     );
 
 
-/* ==================================
+/* =========================================
    COMPONENTES
-   ================================== */
+========================================= */
 
 function preencherComponentes() {
 
@@ -689,18 +596,21 @@ function preencherComponentes() {
 
 
     ids.forEach(
-        nome => {
+        nomeComponente => {
 
             const chave =
-                nome
+                nomeComponente
                     .charAt(0)
                     .toLowerCase() +
-                nome.slice(1);
+                nomeComponente.slice(1);
+
 
             const elemento =
                 document.getElementById(
-                    "comp" + nome
+                    "comp" +
+                    nomeComponente
                 );
+
 
             if (elemento) {
 
@@ -715,9 +625,9 @@ function preencherComponentes() {
 }
 
 
-/* ==================================
+/* =========================================
    ORDEM
-   ================================== */
+========================================= */
 
 function preencherOrdem() {
 
@@ -725,9 +635,7 @@ function preencherOrdem() {
 
     const ordem =
         CONFIG.ordem ||
-        Object.keys(
-            nomesComponentes
-        );
+        Object.keys(nomesComponentes);
 
 
     ordem.forEach(
@@ -748,9 +656,7 @@ function criarItemOrdem(
 ) {
 
     const item =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     item.className =
         "ordem-item";
@@ -759,33 +665,26 @@ function criarItemOrdem(
         componente;
 
 
-    const nome =
-        document.createElement(
-            "span"
-        );
+    const nomeElemento =
+        document.createElement("span");
 
-    nome.className =
+    nomeElemento.className =
         "ordem-nome";
 
-    nome.textContent =
-        nomesComponentes[
-            componente
-        ] || componente;
+    nomeElemento.textContent =
+        nomesComponentes[componente] ||
+        componente;
 
 
     const botoes =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     botoes.className =
         "ordem-botoes";
 
 
     const cima =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     cima.type =
         "button";
@@ -793,18 +692,16 @@ function criarItemOrdem(
     cima.textContent =
         "↑";
 
-
     cima.onclick =
-        () => moverOrdem(
-            item,
-            -1
-        );
+        () =>
+            moverOrdem(
+                item,
+                -1
+            );
 
 
     const baixo =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     baixo.type =
         "button";
@@ -812,25 +709,21 @@ function criarItemOrdem(
     baixo.textContent =
         "↓";
 
-
     baixo.onclick =
-        () => moverOrdem(
-            item,
-            1
-        );
+        () =>
+            moverOrdem(
+                item,
+                1
+            );
 
 
-    botoes.appendChild(
-        cima
-    );
+    botoes.appendChild(cima);
 
-    botoes.appendChild(
-        baixo
-    );
+    botoes.appendChild(baixo);
 
 
     item.appendChild(
-        nome
+        nomeElemento
     );
 
     item.appendChild(
@@ -883,10 +776,6 @@ function moverOrdem(
 }
 
 
-/* ==================================
-   COLETAR ORDEM
-   ================================== */
-
 function coletarOrdem() {
 
     return [
@@ -899,20 +788,121 @@ function coletarOrdem() {
 }
 
 
-/* ==================================
-   ATUALIZAR CONFIG
-   ================================== */
+/* =========================================
+   COLETAR DADOS
+========================================= */
+
+function coletarLinks() {
+
+    return [
+        ...linksEditor.children
+    ]
+        .map(item => {
+
+            const inputs =
+                item.querySelectorAll(
+                    "input"
+                );
+
+
+            return {
+
+                nome:
+                    inputs[0]?.value || "",
+
+                url:
+                    inputs[1]?.value || "",
+
+                icone:
+                    inputs[2]?.value || "",
+
+                ativo: true
+
+            };
+
+        })
+        .filter(
+            link =>
+                link.nome ||
+                link.url
+        );
+
+}
+
+
+function coletarServicos() {
+
+    return [
+        ...servicosEditor.children
+    ]
+        .map(item => {
+
+            const inputs =
+                item.querySelectorAll(
+                    "input, textarea"
+                );
+
+
+            return {
+
+                nome:
+                    inputs[0]?.value || "",
+
+                descricao:
+                    inputs[1]?.value || "",
+
+                ativo: true
+
+            };
+
+        })
+        .filter(
+            servico =>
+                servico.nome ||
+                servico.descricao
+        );
+
+}
+
+
+function coletarPortfolio() {
+
+    return [
+        ...portfolioEditor.children
+    ]
+        .map(item => {
+
+            const input =
+                item.querySelector(
+                    "input"
+                );
+
+            return input?.value || "";
+
+        })
+        .filter(
+            foto => foto
+        );
+
+}
+
+
+/* =========================================
+   ATUALIZAR CONFIGURAÇÃO
+========================================= */
 
 function atualizarConfiguracao() {
 
     CONFIG.perfil =
         CONFIG.perfil || {};
 
+
     CONFIG.perfil.nome =
-        nome.value;
+        nome.value.trim();
+
 
     CONFIG.perfil.descricao =
-        descricao.value;
+        descricao.value.trim();
 
 
     CONFIG.tema =
@@ -922,11 +912,13 @@ function atualizarConfiguracao() {
     CONFIG.localizacao =
         CONFIG.localizacao || {};
 
+
     CONFIG.localizacao.endereco =
-        endereco.value;
+        endereco.value.trim();
+
 
     CONFIG.localizacao.mapa =
-        mapa.value;
+        mapa.value.trim();
 
 
     CONFIG.links =
@@ -984,153 +976,142 @@ function atualizarConfiguracao() {
         coletarOrdem();
 
 
-    atualizarPreview();
+    return CONFIG;
 
 }
 
 
-/* ==================================
-   COLETAR SERVIÇOS
-   ================================== */
+/* =========================================
+   SALVAR NO SUPABASE
+========================================= */
 
-function coletarServicos() {
+async function salvarConfiguracao() {
 
-    return [
-        ...servicosEditor.children
-    ].map(
-        item => {
+    const logado =
+        await verificarLogin();
 
-            const inputs =
-                item.querySelectorAll(
-                    "input, textarea"
-                );
+    if (!logado) return;
 
-            return {
 
-                nome:
-                    inputs[0]?.value || "",
+    atualizarConfiguracao();
 
-                descricao:
-                    inputs[1]?.value || "",
 
-                ativo:
-                    true
-
-            };
-
-        }
+    mostrarMensagem(
+        "Salvando..."
     );
 
-}
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("clients")
+            .update({
+
+                name:
+                    CONFIG.perfil?.nome ||
+                    "Cliente",
+
+                config:
+                    CONFIG,
+
+                updated_at:
+                    new Date().toISOString()
+
+            })
+            .eq(
+                "slug",
+                cliente
+            )
+            .select()
+            .single();
 
 
-/* ==================================
-   COLETAR LINKS
-   ================================== */
-
-function coletarLinks() {
-
-    return [
-        ...linksEditor.children
-    ].map(
-        item => {
-
-            const inputs =
-                item.querySelectorAll(
-                    "input"
-                );
-
-            return {
-
-                nome:
-                    inputs[0]?.value || "",
-
-                url:
-                    inputs[1]?.value || "",
-
-                icone:
-                    inputs[2]?.value || "",
-
-                ativo:
-                    true
-
-            };
-
+        if (error) {
+            throw error;
         }
-    );
-
-}
 
 
-/* ==================================
-   COLETAR PORTFÓLIO
-   ================================== */
+        CONFIG =
+            data.config;
 
-function coletarPortfolio() {
 
-    return [
-        ...portfolioEditor.children
-    ]
-        .map(
-            item => {
-
-                const input =
-                    item.querySelector(
-                        "input"
-                    );
-
-                return input?.value || "";
-
-            }
-        )
-        .filter(
-            foto => foto
+        mostrarMensagem(
+            "✅ Alterações salvas com sucesso!"
         );
 
+
+        atualizarPreview();
+
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        mostrarMensagem(
+            "❌ Erro ao salvar: " +
+            erro.message
+        );
+
+    }
+
 }
 
 
-/* ==================================
-   PREVIEW
-   ================================== */
+/* =========================================
+   PRÉ-VISUALIZAÇÃO
+========================================= */
 
 function atualizarPreview() {
 
-    if (!CONFIG) {
-        return;
-    }
+    if (!preview) return;
 
 
-    const url =
-        `../?cliente=${encodeURIComponent(
-            cliente
-        )}`;
+    preview.onload =
+        function () {
+
+            preview.contentWindow.postMessage(
+                {
+                    tipo:
+                        "BIOPRO_PREVIEW",
+
+                    config:
+                        CONFIG
+                },
+                window.location.origin
+            );
+
+        };
 
 
     preview.src =
-        url;
+        `../?cliente=${encodeURIComponent(
+            cliente
+        )}&preview=${Date.now()}`;
 
 }
 
-
-/* ==================================
-   VISUALIZAR
-   ================================== */
 
 function visualizar() {
 
     window.open(
-        `../?cliente=${cliente}`,
+        `../?cliente=${encodeURIComponent(
+            cliente
+        )}`,
         "_blank"
     );
 
 }
 
 
+/* =========================================
+   BOTÕES
+========================================= */
+
 document
-    .getElementById(
-        "visualizar"
-    )
+    .getElementById("visualizar")
     .addEventListener(
         "click",
         visualizar
@@ -1138,44 +1119,24 @@ document
 
 
 document
-    .getElementById(
-        "visualizarTopo"
-    )
+    .getElementById("visualizarTopo")
     .addEventListener(
         "click",
         visualizar
     );
 
 
-/* ==================================
-   PREPARAR
-   ================================== */
-
 document
-    .getElementById(
-        "salvar"
-    )
+    .getElementById("salvar")
     .addEventListener(
         "click",
-        () => {
-
-            atualizarConfiguracao();
-
-            console.log(
-                CONFIG
-            );
-
-            mostrarMensagem(
-                "Configuração atualizada. O salvamento permanente será conectado na próxima etapa."
-            );
-
-        }
+        salvarConfiguracao
     );
 
 
-/* ==================================
+/* =========================================
    MENSAGEM
-   ================================== */
+========================================= */
 
 function mostrarMensagem(
     texto
@@ -1187,8 +1148,8 @@ function mostrarMensagem(
 }
 
 
-/* ==================================
+/* =========================================
    INICIAR
-   ================================== */
+========================================= */
 
 carregarConfiguracao();
