@@ -157,3 +157,47 @@ function iniciarBioPro() {
     }
 
 }
+
+window.addEventListener(
+    "message",
+    function (evento) {
+
+        if (
+            evento.origin !==
+            window.location.origin
+        ) {
+            return;
+        }
+
+
+        if (
+            !evento.data ||
+            evento.data.tipo !==
+            "BIOPRO_PREVIEW"
+        ) {
+            return;
+        }
+
+
+        if (
+            !evento.data.config
+        ) {
+            return;
+        }
+
+
+        window.BIOPRO_CONFIG =
+            evento.data.config;
+
+
+        if (
+            typeof iniciarAplicacao ===
+            "function"
+        ) {
+
+            iniciarAplicacao();
+
+        }
+
+    }
+);
