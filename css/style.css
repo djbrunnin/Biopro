@@ -1,67 +1,4 @@
-
 /* ========================================
-   ÍCONES DOS LINKS
-   ======================================== */
-
-.bio-link {
-    position: relative;
-}
-
-
-.bio-link-icon {
-
-    position: absolute;
-
-    left: 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    width: 26px;
-
-    height: 26px;
-
-    color:
-        var(--color-primary);
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-}
-
-
-.bio-link-text {
-
-    text-align: center;
-
-    padding:
-        0 35px;
-
-}
-
-
-/* ========================================
-   MICROINTERAÇÃO
-   ======================================== */
-
-.bio-link:hover
-.bio-link-icon {
-
-    transform:
-        scale(1.1);
-
-}
-
-
-.bio-link-icon {
-
-    transition:
-        transform 0.2s ease;
-}/* ========================================
    BIOPRO
    STYLE PRINCIPAL
    ======================================== */
@@ -93,6 +30,9 @@ body {
 
 
 button,
+input,
+textarea,
+select,
 a {
     font: inherit;
 }
@@ -116,6 +56,9 @@ img {
 
 #app {
     width: 100%;
+    animation:
+        biopro-page-in
+        0.7s ease both;
 }
 
 
@@ -124,26 +67,37 @@ img {
    ======================================== */
 
 .bio-profile {
+    width: 100%;
     text-align: center;
     margin-bottom: var(--space-xl);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
 .bio-logo {
+    display: block !important;
+
     width: 110px;
     height: 110px;
 
-    object-fit: cover;
+    object-fit: contain;
 
     margin: 0 auto 20px;
 
     border-radius: 50%;
 
-    border: 3px solid
+    border:
+        3px solid
         var(--color-secondary);
 
     box-shadow:
         var(--shadow-soft);
+
+    background:
+        var(--color-surface);
 }
 
 
@@ -179,10 +133,16 @@ img {
     gap: 12px;
 
     margin-bottom: var(--space-xl);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
 .bio-link {
+    position: relative;
+
     display: flex;
 
     align-items: center;
@@ -213,13 +173,14 @@ img {
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
-        background 0.2s ease;
+        background 0.2s ease,
+        border-color 0.2s ease;
 }
 
 
 .bio-link:hover {
     transform:
-        translateY(-2px);
+        translateY(-3px);
 
     box-shadow:
         0 12px 30px
@@ -229,7 +190,46 @@ img {
 
 .bio-link:active {
     transform:
-        scale(0.98);
+        scale(0.97);
+}
+
+
+.bio-link-icon {
+    position: absolute;
+
+    left: 18px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    color:
+        var(--color-primary);
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.bio-link:hover .bio-link-icon {
+    transform:
+        scale(1.1);
+}
+
+
+.bio-link-text {
+    text-align: center;
+
+    padding:
+        0 35px;
 }
 
 
@@ -239,10 +239,16 @@ img {
 
 .bio-highlight {
     margin-bottom: var(--space-xl);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
 .bio-highlight img {
+    display: block;
+
     width: 100%;
 
     max-height: 420px;
@@ -254,11 +260,21 @@ img {
 
     box-shadow:
         var(--shadow-soft);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.bio-highlight img:hover {
+    transform:
+        scale(1.015);
 }
 
 
 /* ========================================
-   TÍTULOS DE SEÇÃO
+   TÍTULOS
    ======================================== */
 
 .bio-services h2,
@@ -280,6 +296,10 @@ img {
 
 .bio-services {
     margin-bottom: var(--space-xl);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
@@ -324,6 +344,10 @@ img {
 
 .bio-portfolio {
     margin-bottom: var(--space-xl);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
@@ -338,6 +362,8 @@ img {
 
 
 .portfolio-grid img {
+    display: block;
+
     width: 100%;
 
     aspect-ratio: 1 / 1;
@@ -349,6 +375,16 @@ img {
 
     box-shadow:
         var(--shadow-soft);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.portfolio-grid img:hover {
+    transform:
+        scale(1.015);
 }
 
 
@@ -375,6 +411,10 @@ img {
 
     box-shadow:
         var(--shadow-soft);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
@@ -410,6 +450,10 @@ img {
     gap: 18px;
 
     margin-bottom: var(--space-large);
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
 }
 
 
@@ -428,55 +472,47 @@ img {
     color:
         var(--color-primary);
 }
-/* ========================================
-   BIOPRO
-   ANIMAÇÕES
-   ======================================== */
 
 
 /* ========================================
-   ENTRADA DA PÁGINA
+   RODAPÉ
    ======================================== */
 
-#app {
+.bio-footer {
+    text-align: center;
+
+    padding: 20px;
+
+    color:
+        var(--color-text-light);
+
+    font-size: 12px;
+
     animation:
-        biopro-page-in 0.7s ease both;
+        biopro-block-in
+        0.6s ease both;
 }
 
+
+/* ========================================
+   ANIMAÇÕES
+   ======================================== */
 
 @keyframes biopro-page-in {
 
     from {
         opacity: 0;
+
         transform:
             translateY(12px);
     }
 
     to {
         opacity: 1;
+
         transform:
             translateY(0);
     }
-
-}
-
-
-/* ========================================
-   ENTRADA DOS COMPONENTES
-   ======================================== */
-
-.bio-profile,
-.bio-links,
-.bio-highlight,
-.bio-services,
-.bio-portfolio,
-.bio-location,
-.bio-social,
-.bio-footer {
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
 
 }
 
@@ -485,93 +521,6 @@ img {
 
     from {
         opacity: 0;
+
         transform:
-            translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform:
-            translateY(0);
-    }
-
-}
-
-
-/* ========================================
-   BOTÕES
-   ======================================== */
-
-.bio-link {
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
-
-}
-
-
-.bio-link:hover {
-
-    transform:
-        translateY(-3px);
-
-}
-
-
-.bio-link:active {
-
-    transform:
-        scale(0.97);
-
-}
-
-
-/* ========================================
-   IMAGENS
-   ======================================== */
-
-.bio-highlight img,
-.portfolio-grid img {
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-
-}
-
-
-.bio-highlight img:hover,
-.portfolio-grid img:hover {
-
-    transform:
-        scale(1.015);
-
-}
-
-
-/* ========================================
-   ACESSIBILIDADE
-   ======================================== */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-
-        animation-duration:
-            0.01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        transition-duration:
-            0.01ms !important;
-
-        scroll-behavior:
-            auto !important;
-    }
-
-}
+            translateY(10
