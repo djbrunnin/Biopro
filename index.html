@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
@@ -18,11 +17,6 @@
 
     <title>BioPro</title>
 
-
-    <!-- =================================
-         CSS
-         ================================= -->
-
     <link
         rel="stylesheet"
         href="css/style.css"
@@ -40,90 +34,57 @@
 
 </head>
 
-
 <body>
-
-
-    <!-- =================================
-         APLICAÇÃO
-         ================================= -->
 
     <main id="app">
 
         <div class="biopro-loading">
-
             Carregando...
-
         </div>
 
     </main>
 
 
-    <!-- =================================
-         SISTEMA DE TEMAS
-         ================================= -->
+    <!-- SUPABASE -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <script
+        src="js/supabase.js"
+    ></script>
+
+
+    <!-- BIOPRO -->
 
     <script
         src="themes/themes.js"
     ></script>
 
-
-    <!-- =================================
-         LINKS
-         ================================= -->
-
     <script
         src="js/links.js"
     ></script>
-
-
-    <!-- =================================
-         COMPONENTES
-         ================================= -->
 
     <script
         src="js/components.js"
     ></script>
 
-
-    <!-- =================================
-         MOTOR
-         ================================= -->
-
     <script
         src="js/app.js"
     ></script>
-
-
-    <!-- =================================
-         CLIENTE
-         ================================= -->
 
     <script
         src="js/client.js"
     ></script>
 
 
-    <!-- =================================
-         CARREGAR CLIENTE
-         ================================= -->
+    <!-- INICIAR -->
 
     <script>
 
         carregarCliente();
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script src="js/supabase.js"></script>
-    <script src="themes/themes.js"></script>
-    <script src="js/links.js"></script>
-    <script src="js/components.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/client.js"></script>
-
-    <script>
-        carregarCliente();
     </script>
 
 </body>
