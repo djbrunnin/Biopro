@@ -60,6 +60,12 @@ const mensagem =
 const preview =
     document.getElementById("preview");
 
+const logoUpload =
+    document.getElementById("logoUpload");
+
+const logoStatus =
+    document.getElementById("logoStatus");
+
 
 /* =========================================
    VERIFICAR LOGIN
