@@ -34,46 +34,44 @@ function criarElemento(
 
 function renderPerfil(config) {
 
-    const section =
-        criarElemento(
-            "section",
-            ["bio-profile"]
-        );
+    const section = document.createElement("section");
+    section.className = "bio-profile";
 
-    // Logo
-    if (config.perfil.logo) {
+    // LOGO
+    if (config.perfil && config.perfil.logo) {
 
-        const img =
-            document.createElement("img");
+        const img = document.createElement("img");
 
-        img.src =
-            config.perfil.logo;
+        img.className = "bio-logo";
 
-        img.alt =
-            `Logo de ${
-                config.perfil.nome || "cliente"
-            }`;
+        img.src = config.perfil.logo;
 
-        img.className =
-            "bio-logo";
+        img.alt = config.perfil.nome || "Logo";
+
+        img.loading = "eager";
+
+        img.onerror = function () {
+            console.error(
+                "Não foi possível carregar a logo:",
+                this.src
+            );
+
+            this.style.display = "none";
+        };
 
         section.appendChild(img);
-
     }
 
-
-    // Nome
-    const nome =
-        document.createElement("h1");
+    // NOME
+    const nome = document.createElement("h1");
 
     nome.textContent =
-        config.perfil.nome || "";
+        config.perfil?.nome || "";
 
     section.appendChild(nome);
 
-
-    // Descrição
-    if (config.perfil.descricao) {
+    // DESCRIÇÃO
+    if (config.perfil?.descricao) {
 
         const descricao =
             document.createElement("p");
@@ -82,11 +80,9 @@ function renderPerfil(config) {
             config.perfil.descricao;
 
         section.appendChild(descricao);
-
     }
 
     return section;
-
 }
 
 
