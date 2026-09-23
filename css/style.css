@@ -1,526 +1,378 @@
-/* ========================================
-   BIOPRO
-   STYLE PRINCIPAL
-   ======================================== */
-
-
-/* ========================================
-   RESET
-   ======================================== */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
-html {
-    scroll-behavior: smooth;
-}
-
-
 body {
-    font-family: var(--font-main);
-    background: var(--color-background);
-    color: var(--color-text);
-    min-height: 100vh;
-    line-height: 1.5;
+    font-family: Arial, sans-serif;
+    background: #f5f4ef;
+    color: #26352d;
 }
 
 
-button,
+/* HEADER */
+
+.editor-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e0d5;
+    padding: 15px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+.editor-header h1 {
+    font-size: 21px;
+}
+
+.editor-header span {
+    color: #66796b;
+    font-size: 13px;
+}
+
+.editor-header button {
+    border: 1px solid #66796b;
+    background: #ffffff;
+    color: #66796b;
+
+    border-radius: 10px;
+    padding: 9px 13px;
+}
+
+
+/* LAYOUT */
+
+.editor-layout {
+    width: 100%;
+    max-width: 1250px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: minmax(0, 650px) minmax(320px, 1fr);
+
+    gap: 24px;
+
+    padding: 20px;
+}
+
+.editor-panel {
+    min-width: 0;
+}
+
+
+/* CARDS */
+
+.editor-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e0d5;
+    border-radius: 16px;
+
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.editor-card h2 {
+    font-size: 18px;
+    margin-bottom: 17px;
+}
+
+
+/* FORM */
+
+label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
 input,
 textarea,
-select,
-a {
-    font: inherit;
-}
-
-
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-
-/* ========================================
-   APLICAÇÃO
-   ======================================== */
-
-#app {
+select {
     width: 100%;
-    animation:
-        biopro-page-in
-        0.7s ease both;
-}
 
+    margin-top: 7px;
 
-/* ========================================
-   PERFIL
-   ======================================== */
+    padding: 13px;
 
-.bio-profile {
-    width: 100%;
-    text-align: center;
-    margin-bottom: var(--space-xl);
+    border: 1px solid #ddd8ce;
+    border-radius: 10px;
 
-    animation:
-        biopro-block-in
-        0.6s ease both;
-}
+    background: #faf9f6;
 
-
-.bio-logo {
-    display: block !important;
-
-    width: 110px;
-    height: 110px;
-
-    object-fit: contain;
-
-    margin: 0 auto 20px;
-
-    border-radius: 50%;
-
-    border:
-        3px solid
-        var(--color-secondary);
-
-    box-shadow:
-        var(--shadow-soft);
-
-    background:
-        var(--color-surface);
-}
-
-
-.bio-profile h1 {
-    font-size: 28px;
-    font-weight: 600;
-
-    margin-bottom: 8px;
-}
-
-
-.bio-profile p {
-    max-width: 520px;
-
-    margin: 0 auto;
-
-    color:
-        var(--color-text-light);
+    color: #26352d;
 
     font-size: 15px;
 }
 
+textarea {
+    min-height: 90px;
+    resize: vertical;
+}
 
-/* ========================================
-   LINKS
-   ======================================== */
-
-.bio-links {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 12px;
-
-    margin-bottom: var(--space-xl);
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid #c8a96b;
 }
 
 
-.bio-link {
-    position: relative;
+/* ITEMS */
 
-    display: flex;
+.editor-item {
+    background: #faf9f6;
 
-    align-items: center;
-    justify-content: center;
+    border: 1px solid #e5e0d5;
+    border-radius: 12px;
 
-    width: 100%;
-
-    min-height: 54px;
-
-    padding: 14px 20px;
-
-    background:
-        var(--color-surface);
-
-    color:
-        var(--color-text);
-
-    border:
-        1px solid
-        var(--color-border);
-
-    border-radius:
-        var(--radius-medium);
-
-    box-shadow:
-        var(--shadow-soft);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease,
-        border-color 0.2s ease;
-}
-
-
-.bio-link:hover {
-    transform:
-        translateY(-3px);
-
-    box-shadow:
-        0 12px 30px
-        rgba(0, 0, 0, 0.09);
-}
-
-
-.bio-link:active {
-    transform:
-        scale(0.97);
-}
-
-
-.bio-link-icon {
-    position: absolute;
-
-    left: 18px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 26px;
-    height: 26px;
-
-    color:
-        var(--color-primary);
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    transition:
-        transform 0.2s ease;
-}
-
-
-.bio-link:hover .bio-link-icon {
-    transform:
-        scale(1.1);
-}
-
-
-.bio-link-text {
-    text-align: center;
-
-    padding:
-        0 35px;
-}
-
-
-/* ========================================
-   DESTAQUE
-   ======================================== */
-
-.bio-highlight {
-    margin-bottom: var(--space-xl);
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
-}
-
-
-.bio-highlight img {
-    display: block;
-
-    width: 100%;
-
-    max-height: 420px;
-
-    object-fit: cover;
-
-    border-radius:
-        var(--radius-large);
-
-    box-shadow:
-        var(--shadow-soft);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-
-.bio-highlight img:hover {
-    transform:
-        scale(1.015);
-}
-
-
-/* ========================================
-   TÍTULOS
-   ======================================== */
-
-.bio-services h2,
-.bio-portfolio h2,
-.bio-location h2 {
-    font-size: 21px;
-
-    font-weight: 600;
-
-    margin-bottom: 18px;
-
-    text-align: center;
-}
-
-
-/* ========================================
-   SERVIÇOS
-   ======================================== */
-
-.bio-services {
-    margin-bottom: var(--space-xl);
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
-}
-
-
-.service-item {
-    background:
-        var(--color-surface);
-
-    border:
-        1px solid
-        var(--color-border);
-
-    border-radius:
-        var(--radius-medium);
-
-    padding: 18px;
+    padding: 14px;
 
     margin-bottom: 12px;
-
-    box-shadow:
-        var(--shadow-soft);
 }
 
+.editor-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-.service-item h3 {
-    font-size: 16px;
-
-    margin-bottom: 5px;
+    margin-bottom: 12px;
 }
 
-
-.service-item p {
-    color:
-        var(--color-text-light);
-
+.editor-item-header strong {
     font-size: 14px;
 }
 
+.remover {
+    border: 0;
+    background: transparent;
 
-/* ========================================
-   PORTFÓLIO
-   ======================================== */
+    color: #9b5555;
 
-.bio-portfolio {
-    margin-bottom: var(--space-xl);
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
+    cursor: pointer;
 }
 
 
-.portfolio-grid {
+/* BOTÕES */
+
+.button-secondary {
+    width: 100%;
+
+    border: 1px dashed #66796b;
+
+    background: #ffffff;
+
+    color: #66796b;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+
+/* CHECKBOX */
+
+.componentes-lista {
     display: grid;
+    gap: 9px;
+}
 
-    grid-template-columns:
-        repeat(2, 1fr);
+.check-item {
+    display: flex;
 
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0;
+
+    padding: 11px;
+
+    border: 1px solid #e5e0d5;
+
+    border-radius: 10px;
+
+    background: #faf9f6;
+}
+
+.check-item input {
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+}
+
+
+/* ORDEM */
+
+.helper {
+    font-size: 13px;
+    color: #68736c;
+
+    margin-bottom: 12px;
+}
+
+.ordem-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 11px 12px;
+
+    margin-bottom: 8px;
+
+    border: 1px solid #e5e0d5;
+
+    border-radius: 10px;
+
+    background: #faf9f6;
+}
+
+.ordem-nome {
+    font-size: 14px;
+}
+
+.ordem-botoes {
+    display: flex;
+    gap: 5px;
+}
+
+.ordem-botoes button {
+    border: 1px solid #ddd8ce;
+
+    background: #ffffff;
+
+    border-radius: 7px;
+
+    padding: 5px 9px;
+
+    cursor: pointer;
+}
+
+
+/* AÇÕES */
+
+.editor-actions {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
 }
 
+.editor-actions button {
+    border: 0;
 
-.portfolio-grid img {
-    display: block;
+    border-radius: 12px;
 
-    width: 100%;
+    padding: 15px;
 
-    aspect-ratio: 1 / 1;
-
-    object-fit: cover;
-
-    border-radius:
-        var(--radius-medium);
-
-    box-shadow:
-        var(--shadow-soft);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-
-.portfolio-grid img:hover {
-    transform:
-        scale(1.015);
-}
-
-
-/* ========================================
-   LOCALIZAÇÃO
-   ======================================== */
-
-.bio-location {
-    text-align: center;
-
-    margin-bottom: var(--space-xl);
-
-    padding: 24px;
-
-    background:
-        var(--color-surface);
-
-    border:
-        1px solid
-        var(--color-border);
-
-    border-radius:
-        var(--radius-large);
-
-    box-shadow:
-        var(--shadow-soft);
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
-}
-
-
-.bio-location p {
-    color:
-        var(--color-text-light);
-
-    margin-bottom: 12px;
-}
-
-
-.bio-location a {
-    display: inline-block;
-
-    color:
-        var(--color-primary);
+    font-size: 15px;
 
     font-weight: 600;
+
+    cursor: pointer;
+
+    background: #66796b;
+    color: #ffffff;
+}
+
+.editor-actions button:last-child {
+    background: #ffffff;
+
+    color: #66796b;
+
+    border: 1px solid #66796b;
 }
 
 
-/* ========================================
-   REDES SOCIAIS
-   ======================================== */
+/* MENSAGEM */
 
-.bio-social {
-    display: flex;
+.mensagem {
+    min-height: 20px;
 
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    gap: 18px;
-
-    margin-bottom: var(--space-large);
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
-}
-
-
-.bio-social a {
-    color:
-        var(--color-text-light);
-
-    font-size: 14px;
-
-    transition:
-        color 0.2s ease;
-}
-
-
-.bio-social a:hover {
-    color:
-        var(--color-primary);
-}
-
-
-/* ========================================
-   RODAPÉ
-   ======================================== */
-
-.bio-footer {
     text-align: center;
 
-    padding: 20px;
+    margin: 15px 0;
 
-    color:
-        var(--color-text-light);
-
-    font-size: 12px;
-
-    animation:
-        biopro-block-in
-        0.6s ease both;
+    font-size: 14px;
 }
 
 
-/* ========================================
-   ANIMAÇÕES
-   ======================================== */
+/* PREVIEW */
 
-@keyframes biopro-page-in {
+.preview-area {
+    position: sticky;
+    top: 85px;
 
-    from {
-        opacity: 0;
+    height: calc(100vh - 105px);
 
-        transform:
-            translateY(12px);
+    background: #ffffff;
+
+    border: 1px solid #e5e0d5;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.preview-header {
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 15px;
+
+    border-bottom: 1px solid #e5e0d5;
+
+    font-size: 13px;
+}
+
+#preview {
+    width: 100%;
+    height: calc(100% - 45px);
+
+    border: 0;
+
+    background: #ffffff;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 850px) {
+
+    .editor-layout {
+        grid-template-columns: 1fr;
     }
 
-    to {
-        opacity: 1;
+    .preview-area {
+        position: relative;
+        top: auto;
 
-        transform:
-            translateY(0);
+        height: 650px;
+
+        order: -1;
     }
 
 }
 
 
-@keyframes biopro-block-in {
+@media (min-width: 851px) {
 
-    from {
-        opacity: 0;
+    .preview-area {
+        min-height: 700px;
+    }
 
-        transform:
-            translateY(10
+}
