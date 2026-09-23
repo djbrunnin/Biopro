@@ -35,45 +35,93 @@ function criarElemento(
 function renderPerfil(config) {
 
     const section =
-        criarElemento(
-            "section",
-            ["bio-profile"]
-        );
+        document.createElement("section");
 
-    // Logo
-    if (config.perfil.logo) {
+    section.className =
+        "bio-profile";
+
+
+    /* =========================
+       LOGO
+       ========================= */
+
+    if (config.perfil?.logo) {
 
         const img =
             document.createElement("img");
+
+        img.className =
+            "bio-logo";
 
         img.src =
             config.perfil.logo;
 
         img.alt =
-            `Logo de ${
-                config.perfil.nome || "cliente"
-            }`;
+            config.perfil.nome || "Logo";
 
-        img.className =
-            "bio-logo";
+        img.loading =
+            "eager";
+
+        img.style.display =
+            "block";
+
+        img.style.width =
+            "120px";
+
+        img.style.height =
+            "120px";
+
+        img.style.objectFit =
+            "contain";
+
+        img.style.margin =
+            "0 auto 15px";
+
+        img.onload =
+            function () {
+
+                console.log(
+                    "Logo carregada"
+                );
+
+            };
+
+        img.onerror =
+            function () {
+
+                console.error(
+                    "Erro ao carregar:",
+                    img.src
+                );
+
+                img.alt =
+                    "Não foi possível carregar a logo";
+
+            };
 
         section.appendChild(img);
 
     }
 
 
-    // Nome
+    /* =========================
+       NOME
+       ========================= */
+
     const nome =
         document.createElement("h1");
 
     nome.textContent =
-        config.perfil.nome || "";
+        config.perfil?.nome || "";
 
     section.appendChild(nome);
 
 
-    // Descrição
-    if (config.perfil.descricao) {
+    /* =========================
+       DESCRIÇÃO
+       ========================= */
+
+    if (config.perfil?.descricao) {
 
         const descricao =
             document.createElement("p");
@@ -81,12 +129,14 @@ function renderPerfil(config) {
         descricao.textContent =
             config.perfil.descricao;
 
-        section.appendChild(descricao);
+        section.appendChild(
+            descricao
+        );
 
     }
 
-    return section;
 
+    return section;
 }
 
 
