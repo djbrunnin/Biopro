@@ -34,59 +34,79 @@ function criarElemento(
 
 function renderPerfil(config) {
 
-    const section = document.createElement("section");
-    section.className = "bio-profile";
+    const section =
+        document.createElement("section");
 
-    console.log(
-        "LOGO RECEBIDA:",
-        config.perfil?.logo
-    );
+    section.className =
+        "bio-profile";
+
+
+    /* =========================
+       LOGO
+       ========================= */
 
     if (config.perfil?.logo) {
 
-        const img = document.createElement("img");
+        const img =
+            document.createElement("img");
 
-        img.className = "bio-logo";
+        img.className =
+            "bio-logo";
 
-        img.src = config.perfil.logo;
+        img.src =
+            config.perfil.logo;
 
         img.alt =
             config.perfil.nome || "Logo";
 
-        img.style.display = "block";
-        img.style.width = "120px";
-        img.style.height = "120px";
-        img.style.objectFit = "contain";
-        img.style.margin = "0 auto 15px";
+        img.loading =
+            "eager";
 
-        img.onload = function () {
+        img.style.display =
+            "block";
 
-            console.log(
-                "✅ LOGO CARREGADA:",
-                this.src
-            );
+        img.style.width =
+            "120px";
 
-        };
+        img.style.height =
+            "120px";
 
-        img.onerror = function () {
+        img.style.objectFit =
+            "contain";
 
-            console.error(
-                "❌ ERRO AO CARREGAR LOGO:",
-                this.src
-            );
+        img.style.margin =
+            "0 auto 15px";
 
-        };
+        img.onload =
+            function () {
+
+                console.log(
+                    "Logo carregada"
+                );
+
+            };
+
+        img.onerror =
+            function () {
+
+                console.error(
+                    "Erro ao carregar:",
+                    img.src
+                );
+
+                img.alt =
+                    "Não foi possível carregar a logo";
+
+            };
 
         section.appendChild(img);
 
-    } else {
-
-        console.warn(
-            "⚠️ CONFIGURAÇÃO NÃO POSSUI LOGO"
-        );
-
     }
 
+
+    /* =========================
+       NOME
+       ========================= */
 
     const nome =
         document.createElement("h1");
@@ -97,6 +117,10 @@ function renderPerfil(config) {
     section.appendChild(nome);
 
 
+    /* =========================
+       DESCRIÇÃO
+       ========================= */
+
     if (config.perfil?.descricao) {
 
         const descricao =
@@ -105,7 +129,9 @@ function renderPerfil(config) {
         descricao.textContent =
             config.perfil.descricao;
 
-        section.appendChild(descricao);
+        section.appendChild(
+            descricao
+        );
 
     }
 
