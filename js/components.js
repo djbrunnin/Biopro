@@ -37,8 +37,12 @@ function renderPerfil(config) {
     const section = document.createElement("section");
     section.className = "bio-profile";
 
-    // LOGO
-    if (config.perfil && config.perfil.logo) {
+    console.log(
+        "LOGO RECEBIDA:",
+        config.perfil?.logo
+    );
+
+    if (config.perfil?.logo) {
 
         const img = document.createElement("img");
 
@@ -46,31 +50,53 @@ function renderPerfil(config) {
 
         img.src = config.perfil.logo;
 
-        img.alt = config.perfil.nome || "Logo";
+        img.alt =
+            config.perfil.nome || "Logo";
 
-        img.loading = "eager";
+        img.style.display = "block";
+        img.style.width = "120px";
+        img.style.height = "120px";
+        img.style.objectFit = "contain";
+        img.style.margin = "0 auto 15px";
 
-        img.onerror = function () {
-            console.error(
-                "Não foi possível carregar a logo:",
+        img.onload = function () {
+
+            console.log(
+                "✅ LOGO CARREGADA:",
                 this.src
             );
 
-            this.style.display = "none";
+        };
+
+        img.onerror = function () {
+
+            console.error(
+                "❌ ERRO AO CARREGAR LOGO:",
+                this.src
+            );
+
         };
 
         section.appendChild(img);
+
+    } else {
+
+        console.warn(
+            "⚠️ CONFIGURAÇÃO NÃO POSSUI LOGO"
+        );
+
     }
 
-    // NOME
-    const nome = document.createElement("h1");
+
+    const nome =
+        document.createElement("h1");
 
     nome.textContent =
         config.perfil?.nome || "";
 
     section.appendChild(nome);
 
-    // DESCRIÇÃO
+
     if (config.perfil?.descricao) {
 
         const descricao =
@@ -80,14 +106,12 @@ function renderPerfil(config) {
             config.perfil.descricao;
 
         section.appendChild(descricao);
+
     }
+
 
     return section;
 }
-
-
-/* ========================================
-   LINKS
    ======================================== */
 
 function renderLinks(config) {
