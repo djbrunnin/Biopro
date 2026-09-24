@@ -28,7 +28,7 @@ const BIOPRO_CONFIG = {
         nome: "Casa Botanic Hair",
 
         descricao:
-            "Beleza, cuidado e autoestima em cada detalhe. Especialista em loiros",
+            "Beleza, cuidado e autoestima em cada detalhe. Especialista em loiros.",
 
         logo:
             "clientes/cliente-001/assets/logo/logo.png"
