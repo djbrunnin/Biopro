@@ -1,0 +1,1042 @@
+/* ========================================
+   BIOPRO
+   STYLE PRINCIPAL
+   ======================================== */
+
+
+/* ========================================
+   RESET
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    font-family: var(--font-main);
+    background: var(--color-background);
+    color: var(--color-text);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+
+button,
+a {
+    font: inherit;
+}
+
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* ========================================
+   APLICAÇÃO
+   ======================================== */
+
+#app {
+    width: 100%;
+}
+
+
+/* ========================================
+   PERFIL
+   ======================================== */
+
+.bio-profile {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+
+.bio-logo {
+    width: 110px;
+    height: 110px;
+
+    object-fit: cover;
+
+    margin: 0 auto 20px;
+
+    border-radius: 50%;
+
+    border: 3px solid
+        var(--color-secondary);
+
+    box-shadow:
+        var(--shadow-soft);
+}
+
+
+.bio-profile h1 {
+    font-size: 28px;
+    font-weight: 600;
+
+    margin-bottom: 8px;
+}
+
+
+.bio-profile p {
+    max-width: 520px;
+
+    margin: 0 auto;
+
+    color:
+        var(--color-text-light);
+
+    font-size: 15px;
+}
+
+
+/* ========================================
+   LINKS
+   ======================================== */
+
+.bio-links {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin-bottom: var(--space-xl);
+}
+
+
+.bio-link {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    min-height: 54px;
+
+    padding: 14px 20px;
+
+    background:
+        var(--color-surface);
+
+    color:
+        var(--color-text);
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius:
+        var(--radius-medium);
+
+    box-shadow:
+        var(--shadow-soft);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.bio-link:hover {
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.09);
+}
+
+
+.bio-link:active {
+    transform:
+        scale(0.98);
+}
+
+
+/* ========================================
+   DESTAQUE
+   ======================================== */
+
+.bio-highlight {
+    margin-bottom: var(--space-xl);
+}
+
+
+.bio-highlight img {
+    width: 100%;
+
+    max-height: 420px;
+
+    object-fit: cover;
+
+    border-radius:
+        var(--radius-large);
+
+    box-shadow:
+        var(--shadow-soft);
+}
+
+
+/* ========================================
+   TÍTULOS DE SEÇÃO
+   ======================================== */
+
+.bio-services h2,
+.bio-portfolio h2,
+.bio-location h2 {
+    font-size: 21px;
+
+    font-weight: 600;
+
+    margin-bottom: 18px;
+
+    text-align: center;
+}
+
+
+/* ========================================
+   SERVIÇOS
+   ======================================== */
+
+.bio-services {
+    margin-bottom: var(--space-xl);
+}
+
+
+.service-item {
+    background:
+        var(--color-surface);
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius:
+        var(--radius-medium);
+
+    padding: 18px;
+
+    margin-bottom: 12px;
+
+    box-shadow:
+        var(--shadow-soft);
+}
+
+
+.service-item h3 {
+    font-size: 16px;
+
+    margin-bottom: 5px;
+}
+
+
+.service-item p {
+    color:
+        var(--color-text-light);
+
+    font-size: 14px;
+}
+
+
+/* ========================================
+   PORTFÓLIO
+   ======================================== */
+
+.bio-portfolio {
+    margin-bottom: var(--space-xl);
+}
+
+
+.portfolio-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+.portfolio-grid img {
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+    border-radius:
+        var(--radius-medium);
+
+    box-shadow:
+        var(--shadow-soft);
+}
+
+
+/* ========================================
+   LOCALIZAÇÃO
+   ======================================== */
+
+.bio-location {
+    text-align: center;
+
+    margin-bottom: var(--space-xl);
+
+    padding: 24px;
+
+    background:
+        var(--color-surface);
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius:
+        var(--radius-large);
+
+    box-shadow:
+        var(--shadow-soft);
+}
+
+
+.bio-location p {
+    color:
+        var(--color-text-light);
+
+    margin-bottom: 12px;
+}
+
+
+.bio-location a {
+    display: inline-block;
+
+    color:
+        var(--color-primary);
+
+    font-weight: 600;
+}
+
+
+/* ========================================
+   REDES SOCIAIS
+   ======================================== */
+
+.bio-social {
+    display: flex;
+
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    margin-bottom: var(--space-large);
+}
+
+
+.bio-social a {
+    color:
+        var(--color-text-light);
+
+    font-size: 14px;
+
+    transition:
+        color 0.2s ease;
+}
+
+
+.bio-social a:hover {
+    color:
+        var(--color-primary);
+}
+
+
+/* ========================================
+   RODAPÉ
+   ======================================== */
+
+.bio-footer {
+    text-align: center;
+
+    padding:
+        20px 0 10px;
+
+    color:
+        var(--color-text-light);
+
+    font-size: 12px;
+}
+
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+a:focus-visible {
+    outline:
+        2px solid
+        var(--color-secondary);
+
+    outline-offset: 3px;
+}
+/* ========================================
+   ÍCONES DOS LINKS
+   ======================================== */
+
+.bio-link {
+    position: relative;
+}
+
+
+.bio-link-icon {
+
+    position: absolute;
+
+    left: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 26px;
+
+    height: 26px;
+
+    color:
+        var(--color-primary);
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+
+.bio-link-text {
+
+    text-align: center;
+
+    padding:
+        0 35px;
+
+}
+
+
+/* ========================================
+   MICROINTERAÇÃO
+   ======================================== */
+
+.bio-link:hover
+.bio-link-icon {
+
+    transform:
+        scale(1.1);
+
+}
+
+
+.bio-link-icon {
+/* ========================================
+   BIOPRO
+   ANIMAÇÕES
+   ======================================== */
+
+
+/* ========================================
+   ENTRADA DA PÁGINA
+   ======================================== */
+
+#app {
+    animation:
+        biopro-page-in 0.7s ease both;
+}
+
+
+@keyframes biopro-page-in {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* ========================================
+   ENTRADA DOS COMPONENTES
+   ======================================== */
+
+.bio-profile,
+.bio-links,
+.bio-highlight,
+.bio-services,
+.bio-portfolio,
+.bio-location,
+.bio-social,
+.bio-footer {
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
+
+}
+
+
+@keyframes biopro-block-in {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* ========================================
+   BOTÕES
+   ======================================== */
+
+.bio-link {
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+.bio-link:hover {
+
+    transform:
+        translateY(-3px);
+
+}
+
+
+.bio-link:active {
+
+    transform:
+        scale(0.97);
+
+}
+
+
+/* ========================================
+   IMAGENS
+   ======================================== */
+
+.bio-highlight img,
+.portfolio-grid img {
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.bio-highlight img:hover,
+.portfolio-grid img:hover {
+
+    transform:
+        scale(1.015);
+
+}
+
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
+    transition:
+        transform 0.2s ease;
+}
+
+/* ========================================
+   ESTADO DE CARREGAMENTO
+   ======================================== */
+
+.bio-profile img,
+.bio-highlight img,
+.portfolio-grid img {
+
+    background:
+        var(--color-border);
+
+}
+
+
+.bio-highlight {
+
+    overflow: hidden;
+
+    border-radius:
+        var(--radius-large);
+}
+
+
+.portfolio-grid {
+
+    overflow: hidden;
+}
+
+
+/* ========================================
+   SELEÇÃO DE TEXTO
+   ======================================== */
+
+::selection {
+
+    background:
+        var(--color-secondary);
+
+    color:
+        var(--color-surface);
+}
+
+/* ========================================
+   ÍCONES DOS LINKS
+   ======================================== */
+
+.bio-link {
+    position: relative;
+}
+
+
+.bio-link-icon {
+
+    position: absolute;
+
+    left: 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 26px;
+
+    height: 26px;
+
+    color:
+        var(--color-primary);
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+
+.bio-link-text {
+
+    text-align: center;
+
+    padding:
+        0 35px;
+
+}
+
+
+/* ========================================
+   MICROINTERAÇÃO
+   ======================================== */
+
+.bio-link:hover
+.bio-link-icon {
+
+    transform:
+        scale(1.1);
+
+}
+
+
+.bio-link-icon {
+
+    transition:
+        transform 0.2s ease;
+}
+
+/* ========================================
+   BIOPRO
+   ANIMAÇÕES
+   ======================================== */
+
+
+/* ========================================
+   ENTRADA DA PÁGINA
+   ======================================== */
+
+#app {
+    animation:
+        biopro-page-in 0.7s ease both;
+}
+
+
+@keyframes biopro-page-in {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* ========================================
+   ENTRADA DOS COMPONENTES
+   ======================================== */
+
+.bio-profile,
+.bio-links,
+.bio-highlight,
+.bio-services,
+.bio-portfolio,
+.bio-location,
+.bio-social,
+.bio-footer {
+
+    animation:
+        biopro-block-in
+        0.6s ease both;
+
+}
+
+
+@keyframes biopro-block-in {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0);
+    }
+
+}
+
+
+/* ========================================
+   BOTÕES
+   ======================================== */
+
+.bio-link {
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+
+}
+
+
+.bio-link:hover {
+
+    transform:
+        translateY(-3px);
+
+}
+
+
+.bio-link:active {
+
+    transform:
+        scale(0.97);
+
+}
+
+
+/* ========================================
+   IMAGENS
+   ======================================== */
+
+.bio-highlight img,
+.portfolio-grid img {
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+}
+
+
+.bio-highlight img:hover,
+.portfolio-grid img:hover {
+
+    transform:
+        scale(1.015);
+
+}
+
+
+/* ========================================
+   ACESSIBILIDADE
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        scroll-behavior:
+            auto !important;
+    }
+
+}
+
+/* ========================================
+   BIOPRO
+   ACABAMENTO PREMIUM DOS LINKS
+   ======================================== */
+
+.bio-link {
+
+    position: relative;
+
+    overflow: hidden;
+
+    isolation: isolate;
+}
+
+
+.bio-link::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        var(--color-primary);
+
+    opacity: 0;
+
+    transform:
+        translateX(-100%);
+
+    transition:
+        transform 0.3s ease,
+        opacity 0.3s ease;
+
+    z-index: -1;
+}
+
+
+.bio-link:hover::before {
+
+    transform:
+        translateX(0);
+
+    opacity: 0.05;
+
+}
+
+
+.bio-link-icon {
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.bio-link:hover
+.bio-link-icon {
+
+    transform:
+        scale(1.12);
+}
+
+
+/* ========================================
+   PERFIL
+   ======================================== */
+
+.bio-profile {
+
+    animation-delay:
+        0.05s;
+}
+
+
+/* ========================================
+   LINKS
+   ======================================== */
+
+.bio-links {
+
+    animation-delay:
+        0.10s;
+}
+
+
+/* ========================================
+   DESTAQUE
+   ======================================== */
+
+.bio-highlight {
+
+    animation-delay:
+        0.15s;
+}
+
+
+/* ========================================
+   SERVIÇOS
+   ======================================== */
+
+.bio-services {
+
+    animation-delay:
+        0.20s;
+}
+
+
+/* ========================================
+   PORTFÓLIO
+   ======================================== */
+
+.bio-portfolio {
+
+    animation-delay:
+        0.25s;
+}
+
+
+/* ========================================
+   LOCALIZAÇÃO
+   ======================================== */
+
+.bio-location {
+
+    animation-delay:
+        0.30s;
+}
+
+
+/* ========================================
+   REDES
+   ======================================== */
+
+.bio-social {
+
+    animation-delay:
+        0.35s;
+}
+
+/* ========================================
+   ESTADO DE CARREGAMENTO
+   ======================================== */
+
+.bio-profile img,
+.bio-highlight img,
+.portfolio-grid img {
+
+    background:
+        var(--color-border);
+
+}
+
+
+.bio-highlight {
+
+    overflow: hidden;
+
+    border-radius:
+        var(--radius-large);
+}
+
+
+.portfolio-grid {
+
+    overflow: hidden;
+}
+
+
+/* ========================================
+   SELEÇÃO DE TEXTO
+   ======================================== */
+
+::selection {
+
+    background:
+        var(--color-secondary);
+
+    color:
+        var(--color-surface);
+}
