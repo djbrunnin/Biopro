@@ -1,0 +1,268 @@
+/* ========================================
+   BIOPRO
+   EDITOR
+   ======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:
+        #f5f4ef;
+
+    color:
+        #26352d;
+
+    min-height:
+        100vh;
+}
+
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+.editor-header {
+
+    background:
+        #ffffff;
+
+    border-bottom:
+        1px solid #e5e0d5;
+
+    padding:
+        18px 20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+}
+
+
+.editor-header h1 {
+
+    font-size:
+        22px;
+
+}
+
+
+.editor-header span {
+
+    color:
+        #66796b;
+
+    font-size:
+        14px;
+
+}
+
+
+/* ========================================
+   EDITOR
+   ======================================== */
+
+.editor {
+
+    width:
+        100%;
+
+    max-width:
+        680px;
+
+    margin:
+        0 auto;
+
+    padding:
+        20px 16px 40px;
+
+}
+
+
+/* ========================================
+   CARD
+   ======================================== */
+
+.editor-card {
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid #e5e0d5;
+
+    border-radius:
+        16px;
+
+    padding:
+        20px;
+
+    margin-bottom:
+        16px;
+
+}
+
+
+.editor-card h2 {
+
+    font-size:
+        18px;
+
+    margin-bottom:
+        18px;
+
+}
+
+
+/* ========================================
+   CAMPOS
+   ======================================== */
+
+label {
+
+    display:
+        block;
+
+    font-size:
+        14px;
+
+    margin-bottom:
+        16px;
+
+}
+
+
+input,
+textarea,
+select {
+
+    width:
+        100%;
+
+    margin-top:
+        7px;
+
+    padding:
+        13px;
+
+    border:
+        1px solid #ddd8ce;
+
+    border-radius:
+        10px;
+
+    background:
+        #faf9f6;
+
+    color:
+        #26352d;
+
+    font-size:
+        15px;
+
+}
+
+
+textarea {
+
+    min-height:
+        100px;
+
+    resize:
+        vertical;
+
+}
+
+
+/* ========================================
+   AÇÕES
+   ======================================== */
+
+.editor-actions {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        10px;
+
+}
+
+
+.editor-actions button {
+
+    border:
+        0;
+
+    border-radius:
+        12px;
+
+    padding:
+        15px;
+
+    font-size:
+        15px;
+
+    font-weight:
+        600;
+
+    cursor:
+        pointer;
+
+    background:
+        #66796b;
+
+    color:
+        #ffffff;
+
+}
+
+
+.editor-actions button:last-child {
+
+    background:
+        #ffffff;
+
+    color:
+        #66796b;
+
+    border:
+        1px solid #66796b;
+
+}
+
+
+/* ========================================
+   MENSAGEM
+   ======================================== */
+
+.mensagem {
+
+    text-align:
+        center;
+
+    margin-top:
+        16px;
+
+    font-size:
+        14px;
+
+}
