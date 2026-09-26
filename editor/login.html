@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | BioPro</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f5f4ef;
+            font-family: Arial, sans-serif;
+            color: #26352d;
+        }
+
+        .login {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid #e5e0d5;
+            box-shadow: 0 15px 40px rgba(0,0,0,.08);
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        p {
+            color: #68736c;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            margin-top: 7px;
+            padding: 14px;
+            border: 1px solid #ddd8ce;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 10px;
+            background: #66796b;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #mensagem {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login">
+
+        <h1>BioPro</h1>
+
+        <p>
+            Acesse o painel administrativo.
+        </p>
+
+        <label>
+            E-mail
+
+            <input
+                id="email"
+                type="email"
+                autocomplete="email"
+            >
+        </label>
+
+        <label>
+            Senha
+
+            <input
+                id="senha"
+                type="password"
+                autocomplete="current-password"
+            >
+        </label>
+
+        <button id="entrar">
+            Entrar
+        </button>
+
+        <div id="mensagem"></div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+
+    <script>
+
+        const email =
+            document.getElementById("email");
+
+        const senha =
+            document.getElementById("senha");
+
+        const mensagem =
+            document.getElementById("mensagem");
+
+        document
+            .getElementById("entrar")
+            .addEventListener("click", async () => {
+
+                mensagem.textContent =
+                    "Entrando...";
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient.auth.signInWithPassword({
+                    email: email.value.trim(),
+                    password: senha.value
+                });
+
+                if (error) {
+
+                    mensagem.textContent =
+                        "E-mail ou senha inválidos.";
+
+                    console.error(error);
+
+                    return;
+                }
+
+                window.location.href =
+                    "./?cliente=cliente-001";
+
+            });
+
+    </script>
+
+</body>
+
+</html>
