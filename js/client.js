@@ -4,6 +4,46 @@
    CARREGAMENTO DO CLIENTE VIA SUPABASE
    ======================================== */
 
+function aguardarSupabase() {
+
+    return new Promise(
+        function (resolve) {
+
+            if (
+                window.supabaseClient
+            ) {
+                resolve(
+                    window.supabaseClient
+                );
+
+                return;
+            }
+
+
+            const intervalo =
+                setInterval(
+                    function () {
+
+                        if (
+                            window.supabaseClient
+                        ) {
+
+                            clearInterval(
+                                intervalo
+                            );
+
+                            resolve(
+                                window.supabaseClient
+                            );
+                        }
+
+                    },
+                    50
+                );
+
+        }
+    );
+}
 async function obterCliente() {
 
     const parametros =
@@ -40,6 +80,9 @@ async function carregarCliente() {
             "BIOPRO - CLIENTE:",
             cliente
         );
+		
+		const supabase =
+			await aguardarSupabase();
 
         console.log(
             "Buscando configuração no Supabase..."
