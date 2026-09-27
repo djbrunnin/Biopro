@@ -275,6 +275,17 @@ img {
    ======================================== */
 
 .bio-portfolio {
+    margin-bottom: 28px;
+}
+
+.bio-portfolio h2 {
+    margin-bottom: 14px;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.portfolio-grid {
     display: grid;
     grid-template-columns: repeat(
         2,
@@ -283,8 +294,11 @@ img {
     gap: 10px;
 }
 
-.bio-portfolio-item {
-    overflow: hidden;
+.portfolio-grid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
     border-radius: var(
         --radius,
         16px
@@ -293,13 +307,6 @@ img {
         --color-surface,
         #ffffff
     );
-}
-
-.bio-portfolio-item img {
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
 }
 
 /* ========================================
