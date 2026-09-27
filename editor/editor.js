@@ -59,6 +59,12 @@ const mensagem =
 
 const preview =
     document.getElementById("preview");
+	
+const logoUpload =
+    document.getElementById("logoUpload");
+
+const logoStatus =
+    document.getElementById("logoStatus");
 
 
 /* =========================================
@@ -1151,5 +1157,107 @@ function mostrarMensagem(
 /* =========================================
    INICIAR
 ========================================= */
+/* =========================================
+   UPLOAD DO LOGO
+========================================= */
+
+logoUpload.addEventListener(
+    "change",
+    async function () {
+
+        const arquivo =
+            this.files[0];
+
+        if (!arquivo) return;
+
+
+        const logado =
+            await verificarLogin();
+
+        if (!logado) return;
+
+
+        if (!arquivo.type.startsWith("image/")) {
+
+            logoStatus.textContent =
+                "Selecione uma imagem.";
+
+            return;
+
+        }
+
+
+        logoStatus.textContent =
+            "Enviando logo...";
+
+
+        try {
+
+            const extensao =
+                arquivo.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+
+            const caminho =
+                `${cliente}/logo-${Date.now()}.${extensao}`;
+
+
+            const {
+                error: uploadError
+            } = await supabaseClient
+                .storage
+                .from("biopro-assets")
+                .upload(
+                    caminho,
+                    arquivo,
+                    {
+                        upsert: true,
+                        contentType:
+                            arquivo.type
+                    }
+                );
+
+
+            if (uploadError) {
+                throw uploadError;
+            }
+
+
+            const {
+                data
+            } = supabaseClient
+                .storage
+                .from("biopro-assets")
+                .getPublicUrl(
+                    caminho
+                );
+
+
+            CONFIG.perfil =
+                CONFIG.perfil || {};
+
+
+            CONFIG.perfil.logo =
+                data.publicUrl;
+
+
+            logoStatus.textContent =
+                "✅ Logo enviada. Clique em salvar.";
+
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            logoStatus.textContent =
+                "❌ Erro ao enviar logo: " +
+                erro.message;
+
+        }
+
+    }
+);
 
 carregarConfiguracao();
