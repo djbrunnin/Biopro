@@ -71,64 +71,6 @@ async function carregarCliente() {
         }
 
 
-        // Fallback para o config.js antigo
-
-        console.warn(
-            "Cliente não encontrado no Supabase. Usando configuração antiga."
-        );
-
-
-        carregarConfigAntiga(cliente);
-
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao carregar cliente:",
-            erro
-        );
-
-
-        carregarConfigAntiga(
-            await obterCliente()
-        );
-
-    }
-
-}
-
-
-function carregarConfigAntiga(cliente) {
-
-    const script =
-        document.createElement("script");
-
-    script.src =
-        `clientes/${cliente}/config.js`;
-
-
-    script.onload = function () {
-
-        iniciarBioPro();
-
-    };
-
-
-    script.onerror = function () {
-
-        console.error(
-            "Cliente não encontrado:",
-            cliente
-        );
-
-    };
-
-
-    document
-        .body
-        .appendChild(script);
-
-}
 
 
 function iniciarBioPro() {
