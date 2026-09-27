@@ -11,14 +11,25 @@ const BIOPRO_THEMES = {
         nome: "Botanic",
 
         cores: {
-            background: "#f8f6f0",
+			background: "#FAF4F3",
+			surface: "#FFFFFF",
+			primary: "#4F6A53",
+			primaryDark: "#3E5642",
+			secondary: "#8FA888",
+			text: "#2F3A2F",
+			textLight: "#6F806F",
+			border: "#DCE6D8",
+			accentGold: "#D4B86A"
+}
+		cores: {
+            background: "#faf4f3",
             surface: "#ffffff",
-            primary: "#66796b",
-            primaryDark: "#4f6255",
-            secondary: "#c8a96b",
-            text: "#26352d",
-            textLight: "#68736c",
-            border: "#e5e0d5"
+            primary: "#9b7375",
+            primaryDark: "#7d595c",
+            secondary: "#c9a3a5",
+            text: "#443637",
+            textLight: "#806f70",
+            border: "#eadbdc"
         },
 
         fontes: {
