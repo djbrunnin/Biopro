@@ -280,96 +280,67 @@ function renderServicos(config) {
 
 function renderPortfolio(config) {
 
-    const fotos =
-        config.portfolio || [];
-
+    const fotos = config.portfolio || [];
 
     if (!fotos.length) {
-
         return null;
-
     }
 
+    const section = criarElemento(
+        "section",
+        ["bio-section", "bio-portfolio"]
+    );
 
-    const section =
-        criarElemento(
-            "section",
-            ["bio-portfolio"]
-        );
+    const titulo = document.createElement("h2");
 
-
-    const titulo =
-        document.createElement("h2");
-
-    titulo.textContent =
-        "Portfólio";
+    titulo.className = "bio-section-title";
+    titulo.textContent = "Portfólio";
 
     section.appendChild(titulo);
 
+    const gallery = criarElemento(
+        "div",
+        ["portfolio-grid"]
+    );
 
-    const gallery =
-        criarElemento(
+    fotos.forEach((foto, index) => {
+
+        if (!foto) {
+            return;
+        }
+
+        const item = criarElemento(
             "div",
-            ["portfolio-grid"]
+            ["bio-portfolio-item"]
         );
 
+        const img =
+            document.createElement("img");
 
-    fotos.forEach(
-        (foto, index) => {
+        img.src = foto;
 
-            if (!foto) {
-                return;
-            }
+        img.alt =
+            `Foto do portfólio ${index + 1}`;
 
+        img.loading = "lazy";
 
-            const img =
-                document.createElement("img");
+        img.onerror = function () {
+            item.remove();
+        };
 
+        item.appendChild(img);
 
-            img.src =
-                foto;
-
-
-            img.alt =
-                `Foto do portfólio ${
-                    index + 1
-                }`;
-
-
-            img.loading =
-                "lazy";
-
-
-            img.onerror =
-                function () {
-
-                    this.style.display =
-                        "none";
-
-                };
-
-
-            gallery.appendChild(img);
-
-        }
-    );
-
+        gallery.appendChild(item);
+    });
 
     if (!gallery.children.length) {
-
         return null;
-
     }
 
-
-    section.appendChild(
-        gallery
-    );
-
+    section.appendChild(gallery);
 
     return section;
 }
-
 
 /* ========================================
    LOCALIZAÇÃO
