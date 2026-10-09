@@ -79,6 +79,34 @@
 
         <div class="editor-card">
 
+            <h2>Imagem de destaque</h2>
+
+            <p class="helper">O arquivo vai para o Supabase Storage. Depois do envio, clique em “Salvar alterações” para vincular a imagem ao cliente.</p>
+
+            <label>
+                Enviar imagem
+
+                <input
+                    id="destaqueImagem"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+            </label>
+
+            <img
+                id="destaquePreview"
+                class="editor-image-preview editor-image-preview-wide"
+                alt="Prévia da imagem de destaque"
+                hidden
+            >
+
+            <p id="destaqueStatus" class="upload-status" role="status" aria-live="polite"></p>
+
+        </div>
+
+
+        <div class="editor-card">
+
             <h2>Tema</h2>
 
             <select id="tema">
@@ -97,6 +125,10 @@
 
                 <option value="barber">
                     Barber
+                </option>
+
+                <option value="oceanGold">
+                    Ocean Gold
                 </option>
 
             </select>
@@ -142,6 +174,8 @@
 
             <h2>Portfólio</h2>
 
+            <p class="helper">JPG, PNG ou WebP. As fotos vão para o Supabase Storage e aparecem na prévia. Clique em “Salvar alterações” para gravar os links no cliente.</p>
+
             <div id="portfolioEditor"></div>
 
             <button
@@ -149,7 +183,7 @@
                 class="button-secondary"
                 type="button"
             >
-                + Adicionar foto
+                + Enviar foto
             </button>
 
         </div>
@@ -276,7 +310,7 @@
                 id="salvar"
                 type="button"
             >
-                Preparar configuração
+                Salvar alterações
             </button>
 
             <button

@@ -10,7 +10,7 @@ async function obterCliente() {
 
     if (
         cliente &&
-        /^[a-zA-Z0-9-_]+$/.test(cliente)
+        /^[a-zA-Z0-9_-]+$/.test(cliente)
     ) {
         return cliente;
     }
@@ -20,6 +20,12 @@ async function obterCliente() {
 
 
 async function carregarCliente() {
+
+    if (
+        new URLSearchParams(window.location.search).get("preview") === "1"
+    ) {
+        return;
+    }
 
     try {
 
@@ -121,6 +127,11 @@ function carregarConfigAntiga(cliente) {
             cliente
         );
 
+        const app = document.getElementById("app");
+        if (app) {
+            app.textContent = "Página de cliente não encontrada.";
+        }
+
     };
 
 
@@ -164,7 +175,10 @@ window.addEventListener(
 
         if (
             evento.origin !==
-            window.location.origin
+                window.location.origin ||
+            window.parent === window ||
+            evento.source !== window.parent ||
+            new URLSearchParams(window.location.search).get("preview") !== "1"
         ) {
             return;
         }
@@ -180,7 +194,9 @@ window.addEventListener(
 
 
         if (
-            !evento.data.config
+            !evento.data.config ||
+            typeof evento.data.config !== "object" ||
+            Array.isArray(evento.data.config)
         ) {
             return;
         }

@@ -34,6 +34,38 @@ const BIOPRO_ICONS = {
 };
 
 
+function obterUrlSegura(valor) {
+    if (typeof valor !== "string") {
+        return null;
+    }
+
+    const url = valor.trim();
+    if (!url || /[\u0000-\u001f\u007f]/.test(url) || url.startsWith("\\")) {
+        return null;
+    }
+
+    if (url.startsWith("#")) {
+        return url;
+    }
+
+    if (url.startsWith("//")) {
+        return null;
+    }
+
+    const protocolo = url.match(/^([a-z][a-z\d+.-]*):/i);
+    if (
+        protocolo &&
+        !["http", "https", "mailto", "tel"].includes(
+            protocolo[1].toLowerCase()
+        )
+    ) {
+        return null;
+    }
+
+    return url;
+}
+
+
 /* ========================================
    RENDERIZAR LINKS
    ======================================== */
@@ -43,11 +75,12 @@ function renderizarLinks(lista) {
     const resultado = [];
 
 
-    lista
+    (Array.isArray(lista) ? lista : [])
         .filter(
             link =>
                 link &&
-                link.ativo !== false
+                link.ativo !== false &&
+                obterUrlSegura(link.url)
         )
         .forEach(
             linkConfig => {
@@ -60,8 +93,7 @@ function renderizarLinks(lista) {
                     "bio-link";
 
 
-                link.href =
-                    linkConfig.url || "#";
+                link.href = obterUrlSegura(linkConfig.url);
 
 
                 /* =========================
@@ -107,12 +139,7 @@ function renderizarLinks(lista) {
                    LINK EXTERNO
                    ========================= */
 
-                if (
-                    linkConfig.url &&
-                    linkConfig.url !== "#" &&
-                    !linkConfig.url
-                        .startsWith("#")
-                ) {
+                if (/^https?:/i.test(link.href)) {
 
                     link.target =
                         "_blank";

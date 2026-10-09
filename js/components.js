@@ -418,15 +418,16 @@ function renderLocalizacao(config) {
     }
 
 
-    if (
+    const mapaSeguro = obterUrlSegura(
         config.localizacao.mapa
-    ) {
+    );
+
+    if (mapaSeguro && mapaSeguro !== "#") {
 
         const link =
             document.createElement("a");
 
-        link.href =
-            config.localizacao.mapa;
+        link.href = mapaSeguro;
 
         link.target =
             "_blank";
@@ -468,10 +469,8 @@ function renderRedes(config) {
         .forEach(
             ([nome, url]) => {
 
-                if (
-                    !url ||
-                    url === "#"
-                ) {
+                const urlSegura = obterUrlSegura(url);
+                if (!urlSegura || urlSegura === "#") {
 
                     return;
 
@@ -481,8 +480,7 @@ function renderRedes(config) {
                 const link =
                     document.createElement("a");
 
-                link.href =
-                    url;
+                link.href = urlSegura;
 
                 link.target =
                     "_blank";

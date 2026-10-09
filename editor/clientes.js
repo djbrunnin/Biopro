@@ -36,10 +36,21 @@ function mostrarMensagem(texto) {
 
 async function verificarLogin() {
 
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getSession();
+    if (typeof supabaseClient === "undefined") {
+        mostrarMensagem("Não foi possível conectar ao Supabase. Recarregue a página.");
+        return false;
+    }
+
+    let sessaoResultado;
+    try {
+        sessaoResultado = await supabaseClient.auth.getSession();
+    } catch (erro) {
+        console.error(erro);
+        mostrarMensagem("Não foi possível verificar sua sessão. Tente novamente.");
+        return false;
+    }
+
+    const { data, error } = sessaoResultado;
 
 
     if (error) {
@@ -290,6 +301,9 @@ function criarCardCliente(
     visualizar.target =
         "_blank";
 
+    visualizar.rel =
+        "noopener noreferrer";
+
     visualizar.textContent =
         "Visualizar";
 
@@ -463,69 +477,22 @@ function fecharModal() {
    GERAR SLUG
 ========================================= */
 
-async function gerarProximoSlug() {
+function gerarSlug(nome) {
+    const base = nome
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 36)
+        .replace(/-+$/g, "") || "cliente";
 
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("clients")
-        .select("slug");
-
-
-    if (error) {
-        throw error;
-    }
-
-
-    let maiorNumero = 0;
-
-
-    (data || []).forEach(
-        cliente => {
-
-            const resultado =
-                cliente.slug.match(
-                    /^cliente-(\d+)$/
-                );
-
-
-            if (resultado) {
-
-                const numero =
-                    Number(
-                        resultado[1]
-                    );
-
-
-                if (
-                    numero >
-                    maiorNumero
-                ) {
-
-                    maiorNumero =
-                        numero;
-
-                }
-
-            }
-
-        }
-    );
-
-
-    const proximo =
-        maiorNumero + 1;
-
-
-    return (
-        "cliente-" +
-        String(proximo).padStart(
-            3,
-            "0"
-        )
-    );
-
+    const bytes = new Uint8Array(8);
+    crypto.getRandomValues(bytes);
+    const sufixo = Array.from(bytes, byte =>
+        byte.toString(16).padStart(2, "0")
+    ).join("");
+    return `${base}-${sufixo}`;
 }
 
 
@@ -573,8 +540,7 @@ async function criarCliente() {
 
     try {
 
-        const slug =
-            await gerarProximoSlug();
+        const slug = gerarSlug(nome);
 
 
         const config = {

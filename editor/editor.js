@@ -8,6 +8,8 @@ const cliente =
     "cliente-001";
 
 let CONFIG = null;
+let usuarioAtualId = null;
+let previewInicializado = false;
 
 let PUBLICADO = true;
 
@@ -32,6 +34,15 @@ const nome =
 
 const descricao =
     document.getElementById("descricao");
+
+const destaqueImagemInput =
+    document.getElementById("destaqueImagem");
+
+const destaquePreview =
+    document.getElementById("destaquePreview");
+
+const destaqueStatus =
+    document.getElementById("destaqueStatus");
 
 const tema =
     document.getElementById("tema");
@@ -67,10 +78,21 @@ const preview =
 
 async function verificarLogin() {
 
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getSession();
+    if (typeof supabaseClient === "undefined") {
+        mostrarMensagem("Não foi possível conectar ao Supabase. Recarregue a página.");
+        return false;
+    }
+
+    let sessaoResultado;
+    try {
+        sessaoResultado = await supabaseClient.auth.getSession();
+    } catch (erro) {
+        console.error(erro);
+        mostrarMensagem("Não foi possível verificar sua sessão. Tente novamente.");
+        return false;
+    }
+
+    const { data, error } = sessaoResultado;
 
     if (error) {
 
@@ -89,6 +111,8 @@ async function verificarLogin() {
 
         return false;
     }
+
+    usuarioAtualId = data.session.user.id;
 
     return true;
 }
@@ -121,6 +145,7 @@ async function carregarConfiguracao() {
                 "id, slug, name, config, published"
             )
             .eq("slug", cliente)
+            .eq("owner_id", usuarioAtualId)
             .maybeSingle();
 
 
@@ -187,6 +212,8 @@ function preencherEditor() {
     tema.value =
         CONFIG.tema || "botanic";
 
+    preencherDestaque();
+
     endereco.value =
         CONFIG.localizacao?.endereco || "";
 
@@ -205,6 +232,102 @@ function preencherEditor() {
     preencherOrdem();
 
 }
+
+
+function preencherDestaque() {
+    CONFIG.destaque = CONFIG.destaque || {};
+    const imagem = CONFIG.destaque.imagem || "";
+
+    destaquePreview.hidden = !imagem;
+    if (imagem) {
+        destaquePreview.src = imagem;
+    } else {
+        destaquePreview.removeAttribute("src");
+    }
+
+    destaqueStatus.textContent = imagem ? "Imagem atual do cliente." : "";
+}
+
+
+function extensaoImagem(file) {
+    const tiposPermitidos = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp"
+    };
+
+    return tiposPermitidos[file.type] || null;
+}
+
+
+async function enviarImagemParaStorage(file, categoria) {
+    const extensao = extensaoImagem(file);
+    if (!extensao) {
+        throw new Error("Escolha uma imagem JPG, PNG ou WebP.");
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        throw new Error("A imagem deve ter no máximo 10 MB.");
+    }
+
+    if (!(await verificarLogin())) {
+        throw new Error("Entre novamente para enviar imagens.");
+    }
+
+    const caminho = `${cliente}/fotos/${categoria}-${crypto.randomUUID()}.${extensao}`;
+    const armazenamento = supabaseClient.storage.from("biopro-assets");
+    const { data, error } = await armazenamento.upload(caminho, file, {
+        cacheControl: "3600",
+        contentType: file.type,
+        upsert: false
+    });
+
+    if (error) {
+        throw error;
+    }
+
+    const { data: urlData } = armazenamento.getPublicUrl(data.path);
+    return urlData.publicUrl;
+}
+
+
+async function processarUploadImagem(file, categoria, input, status, aoConcluir) {
+    input.disabled = true;
+    status.textContent = "Enviando imagem para o Supabase...";
+
+    try {
+        const url = await enviarImagemParaStorage(file, categoria);
+        aoConcluir(url);
+        atualizarPreviewDoEditor();
+        status.textContent = "Imagem enviada e prévia atualizada.";
+    } catch (erro) {
+        console.error("Falha ao enviar imagem:", erro);
+        status.textContent =
+            erro.message || "Não foi possível enviar a imagem. Confira as permissões do Storage.";
+    } finally {
+        input.disabled = false;
+        input.value = "";
+    }
+}
+
+
+destaqueImagemInput.addEventListener("change", evento => {
+    const file = evento.target.files?.[0];
+    if (!file) return;
+
+    processarUploadImagem(
+        file,
+        "destaque",
+        destaqueImagemInput,
+        destaqueStatus,
+        url => {
+            CONFIG.destaque = CONFIG.destaque || {};
+            CONFIG.destaque.imagem = url;
+            destaquePreview.src = url;
+            destaquePreview.hidden = false;
+        }
+    );
+});
 
 
 /* =========================================
@@ -475,7 +598,7 @@ function preencherPortfolio() {
     portfolioEditor.innerHTML = "";
 
     const fotos =
-        CONFIG.portfolio || [];
+        Array.isArray(CONFIG.portfolio) ? CONFIG.portfolio : [];
 
     fotos.forEach(
         (foto, index) => {
@@ -501,6 +624,8 @@ function criarEditorFoto(
 
     item.className =
         "editor-item";
+
+    item.dataset.imageUrl = foto || "";
 
 
     const header =
@@ -542,16 +667,48 @@ function criarEditorFoto(
     const input =
         document.createElement("input");
 
-    input.placeholder =
-        "Caminho da imagem";
+    input.type = "file";
+    input.accept = "image/jpeg,image/png,image/webp";
 
-    input.value =
-        foto || "";
+    const imagePreview = document.createElement("img");
+    imagePreview.className = "editor-image-preview editor-image-preview-square";
+    imagePreview.alt = `Prévia da foto ${index + 1} do portfólio`;
+    imagePreview.hidden = !foto;
+    if (foto) {
+        imagePreview.src = foto;
+    }
+
+    const status = document.createElement("p");
+    status.className = "upload-status";
+    status.setAttribute("role", "status");
+    status.setAttribute("aria-live", "polite");
+    status.textContent = foto ? "Imagem atual do cliente." : "";
+
+    input.addEventListener("change", evento => {
+        const file = evento.target.files?.[0];
+        if (!file) return;
+
+        processarUploadImagem(
+            file,
+            "portfolio",
+            input,
+            status,
+            url => {
+                item.dataset.imageUrl = url;
+                imagePreview.src = url;
+                imagePreview.hidden = false;
+            }
+        );
+    });
 
 
     item.appendChild(header);
 
     item.appendChild(input);
+
+    item.appendChild(imagePreview);
+
+    item.appendChild(status);
 
     portfolioEditor.appendChild(item);
 
@@ -870,16 +1027,7 @@ function coletarPortfolio() {
     return [
         ...portfolioEditor.children
     ]
-        .map(item => {
-
-            const input =
-                item.querySelector(
-                    "input"
-                );
-
-            return input?.value || "";
-
-        })
+        .map(item => item.dataset.imageUrl || "")
         .filter(
             foto => foto
         );
@@ -1025,6 +1173,10 @@ async function salvarConfiguracao() {
                 "slug",
                 cliente
             )
+            .eq(
+                "owner_id",
+                usuarioAtualId
+            )
             .select()
             .single();
 
@@ -1068,28 +1220,41 @@ function atualizarPreview() {
 
     if (!preview) return;
 
-
-    preview.onload =
-        function () {
-
-            preview.contentWindow.postMessage(
-                {
-                    tipo:
-                        "BIOPRO_PREVIEW",
-
-                    config:
-                        CONFIG
-                },
-                window.location.origin
-            );
-
+    if (!previewInicializado) {
+        preview.onload = function () {
+            previewInicializado = true;
+            enviarConfiguracaoPreview();
         };
 
+        preview.src =
+            `../?cliente=${encodeURIComponent(cliente)}&preview=1`;
+        return;
+    }
 
-    preview.src =
-        `../?cliente=${encodeURIComponent(
-            cliente
-        )}&preview=${Date.now()}`;
+    enviarConfiguracaoPreview();
+
+}
+
+
+function enviarConfiguracaoPreview() {
+    if (!preview?.contentWindow || !CONFIG) return;
+
+    preview.contentWindow.postMessage(
+        {
+            tipo: "BIOPRO_PREVIEW",
+            config: CONFIG
+        },
+        window.location.origin
+    );
+
+}
+
+
+function atualizarPreviewDoEditor() {
+    if (!CONFIG) return;
+
+    atualizarConfiguracao();
+    atualizarPreview();
 
 }
 
@@ -1100,7 +1265,8 @@ function visualizar() {
         `../?cliente=${encodeURIComponent(
             cliente
         )}`,
-        "_blank"
+        "_blank",
+        "noopener,noreferrer"
     );
 
 }
@@ -1132,6 +1298,12 @@ document
         "click",
         salvarConfiguracao
     );
+
+
+const painelEditor = document.querySelector(".editor-panel");
+painelEditor.addEventListener("input", atualizarPreviewDoEditor);
+painelEditor.addEventListener("change", atualizarPreviewDoEditor);
+painelEditor.addEventListener("click", atualizarPreviewDoEditor);
 
 
 /* =========================================

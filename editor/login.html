@@ -96,6 +96,7 @@
             <input
                 id="email"
                 type="email"
+                required
                 autocomplete="email"
             >
         </label>
@@ -106,6 +107,7 @@
             <input
                 id="senha"
                 type="password"
+                required
                 autocomplete="current-password"
             >
         </label>
@@ -132,35 +134,37 @@
         const mensagem =
             document.getElementById("mensagem");
 
-        document
-            .getElementById("entrar")
-            .addEventListener("click", async () => {
+        const botaoEntrar = document.getElementById("entrar");
 
-                mensagem.textContent =
-                    "Entrando...";
+        botaoEntrar.addEventListener("click", async () => {
+            if (!email.value.trim() || !senha.value) {
+                mensagem.textContent = "Preencha e-mail e senha.";
+                return;
+            }
 
-                const {
-                    data,
-                    error
-                } = await supabaseClient.auth.signInWithPassword({
+            botaoEntrar.disabled = true;
+            mensagem.textContent = "Entrando...";
+
+            try {
+                const { error } = await supabaseClient.auth.signInWithPassword({
                     email: email.value.trim(),
                     password: senha.value
                 });
 
                 if (error) {
-
-                    mensagem.textContent =
-                        "E-mail ou senha inválidos.";
-
+                    mensagem.textContent = "E-mail ou senha inválidos.";
                     console.error(error);
-
                     return;
                 }
 
-                window.location.href =
-					"./clientes.html";
-
-            });
+                window.location.href = "./clientes.html";
+            } catch (erro) {
+                console.error(erro);
+                mensagem.textContent = "Não foi possível conectar. Tente novamente.";
+            } finally {
+                botaoEntrar.disabled = false;
+            }
+        });
 
     </script>
 

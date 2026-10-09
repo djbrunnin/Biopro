@@ -176,6 +176,10 @@ img {
 
 .bio-highlight {
     margin-bottom: var(--space-xl);
+    overflow: hidden;
+    border-radius: var(--radius-large);
+    background: var(--color-highlight-background, var(--color-primary));
+    color: var(--color-highlight-text, #ffffff);
 }
 
 
@@ -453,7 +457,6 @@ a:focus-visible {
 }
 
 
-.bio-link-icon {
 /* ========================================
    BIOPRO
    ANIMAÇÕES
@@ -600,9 +603,6 @@ a:focus-visible {
             auto !important;
     }
 
-}
-    transition:
-        transform 0.2s ease;
 }
 
 /* ========================================
