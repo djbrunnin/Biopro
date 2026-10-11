@@ -35,6 +35,15 @@ const nome =
 const descricao =
     document.getElementById("descricao");
 
+const logoImagemInput =
+    document.getElementById("logoImagem");
+
+const logoPreview =
+    document.getElementById("logoPreview");
+
+const logoStatus =
+    document.getElementById("logoStatus");
+
 const destaqueImagemInput =
     document.getElementById("destaqueImagem");
 
@@ -212,6 +221,7 @@ function preencherEditor() {
     tema.value =
         CONFIG.tema || "botanic";
 
+    preencherLogo();
     preencherDestaque();
 
     endereco.value =
@@ -231,6 +241,21 @@ function preencherEditor() {
 
     preencherOrdem();
 
+}
+
+
+function preencherLogo() {
+    CONFIG.perfil = CONFIG.perfil || {};
+    const imagem = CONFIG.perfil.logo || "";
+
+    logoPreview.hidden = !imagem;
+    if (imagem) {
+        logoPreview.src = imagem;
+    } else {
+        logoPreview.removeAttribute("src");
+    }
+
+    logoStatus.textContent = imagem ? "Logo atual do cliente." : "";
 }
 
 
@@ -274,7 +299,8 @@ async function enviarImagemParaStorage(file, categoria) {
         throw new Error("Entre novamente para enviar imagens.");
     }
 
-    const caminho = `${cliente}/fotos/${categoria}-${crypto.randomUUID()}.${extensao}`;
+    const pasta = categoria === "logo" ? "logo" : "fotos";
+    const caminho = `${cliente}/${pasta}/${categoria}-${crypto.randomUUID()}.${extensao}`;
     const armazenamento = supabaseClient.storage.from("biopro-assets");
     const { data, error } = await armazenamento.upload(caminho, file, {
         cacheControl: "3600",
@@ -309,6 +335,25 @@ async function processarUploadImagem(file, categoria, input, status, aoConcluir)
         input.value = "";
     }
 }
+
+
+logoImagemInput.addEventListener("change", evento => {
+    const file = evento.target.files?.[0];
+    if (!file) return;
+
+    processarUploadImagem(
+        file,
+        "logo",
+        logoImagemInput,
+        logoStatus,
+        url => {
+            CONFIG.perfil = CONFIG.perfil || {};
+            CONFIG.perfil.logo = url;
+            logoPreview.src = url;
+            logoPreview.hidden = false;
+        }
+    );
+});
 
 
 destaqueImagemInput.addEventListener("change", evento => {

@@ -172,6 +172,12 @@ select:focus {
     height: 96px;
 }
 
+.editor-image-preview-logo {
+    width: 112px;
+    height: 112px;
+    border-radius: 50%;
+}
+
 .upload-status {
     min-height: 18px;
     margin: 8px 0 0;

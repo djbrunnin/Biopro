@@ -74,6 +74,26 @@
 
             </label>
 
+            <p class="helper">Envie a logo do cliente para o Supabase Storage. Depois, clique em “Salvar alterações” para gravar no perfil.</p>
+
+            <label>
+                Enviar logo
+                <input
+                    id="logoImagem"
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                >
+            </label>
+
+            <img
+                id="logoPreview"
+                class="editor-image-preview editor-image-preview-logo"
+                alt="Prévia da logo"
+                hidden
+            >
+
+            <p id="logoStatus" class="upload-status" role="status" aria-live="polite"></p>
+
         </div>
 
 
