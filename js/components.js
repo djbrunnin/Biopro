@@ -539,8 +539,15 @@ function renderRodape() {
         BIOPRO_CONFIG.marca.mostrarBioPro
     ) {
 
-        texto.textContent =
-            "Criado por by BioPro (62)99193-8647";
+        texto.append("Criado por by BioPro ");
+
+        const telefone = document.createElement("a");
+        telefone.href = "https://api.whatsapp.com/send/?phone=5562991938647&text=Ol%C3%A1%21+Quero+criar+minha+mini+pagina+para+bio+do+meu+instagram&type=phone_number&app_absent=0";
+        telefone.target = "_blank";
+        telefone.rel = "noopener noreferrer";
+        telefone.textContent = "(62)99193-8647";
+
+        texto.appendChild(telefone);
 
     } else {
 
