@@ -478,7 +478,7 @@ function fecharModal() {
 ========================================= */
 
 function gerarSlug(nome) {
-    const base = nome
+    return nome
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
@@ -486,13 +486,6 @@ function gerarSlug(nome) {
         .replace(/^-+|-+$/g, "")
         .slice(0, 36)
         .replace(/-+$/g, "") || "cliente";
-
-    const bytes = new Uint8Array(8);
-    crypto.getRandomValues(bytes);
-    const sufixo = Array.from(bytes, byte =>
-        byte.toString(16).padStart(2, "0")
-    ).join("");
-    return `${base}-${sufixo}`;
 }
 
 
@@ -540,12 +533,12 @@ async function criarCliente() {
 
     try {
 
-        const slug = gerarSlug(nome);
+        const slugBase = gerarSlug(nome);
 
 
         const config = {
 
-            id: slug,
+            id: slugBase,
 
             tema: "botanic",
 
@@ -675,35 +668,55 @@ async function criarCliente() {
         };
 
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from("clients")
-            .insert({
+        let data = null;
 
-                owner_id:
-                    usuarioAtual.id,
+        for (let numero = 1; numero <= 100; numero++) {
+            const slug = numero === 1
+                ? slugBase
+                : `${slugBase}-${numero}`;
 
-                slug:
+            const { data: existente, error: erroBusca } = await supabaseClient
+                .from("clients")
+                .select("slug")
+                .eq("slug", slug)
+                .eq("owner_id", usuarioAtual.id)
+                .limit(1);
+
+            if (erroBusca) {
+                throw erroBusca;
+            }
+
+            if (existente?.length) {
+                continue;
+            }
+
+            config.id = slug;
+
+            const resultado = await supabaseClient
+                .from("clients")
+                .insert({
+                    owner_id: usuarioAtual.id,
                     slug,
-
-                name:
-                    nome,
-
-                config:
+                    name: nome,
                     config,
+                    published: false
+                })
+                .select()
+                .single();
 
-                published:
-                    false
+            if (!resultado.error) {
+                data = resultado.data;
+                break;
+            }
 
-            })
-            .select()
-            .single();
+            // Uma inserção simultânea pode ocupar o slug depois da consulta.
+            if (resultado.error.code !== "23505") {
+                throw resultado.error;
+            }
+        }
 
-
-        if (error) {
-            throw error;
+        if (!data) {
+            throw new Error("Não foi possível encontrar um slug livre para este cliente.");
         }
 
 
