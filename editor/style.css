@@ -36,13 +36,27 @@ body {
     font-size: 13px;
 }
 
-.editor-header button {
+.editor-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editor-header button,
+.editor-header .back-link {
     border: 1px solid #66796b;
     background: #ffffff;
     color: #66796b;
 
     border-radius: 10px;
     padding: 9px 13px;
+    white-space: nowrap;
+}
+
+.editor-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
 }
 
 
