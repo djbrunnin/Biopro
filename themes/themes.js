@@ -102,6 +102,28 @@ const BIOPRO_THEMES = {
             raio: "14px",
             sombra: "0 10px 30px rgba(0,0,0,0.20)"
         }
+    },
+
+    climatizacaoEnergia: {
+        nome: "Climatização & Energia",
+        cores: {
+            background: "#FFFFFF",
+            surface: "#F4F6F8",
+            primary: "#0B2540",
+            primaryDark: "#071A2D",
+            secondary: "#6B5200",
+            text: "#17212B",
+            textLight: "#4B5563",
+            border: "#D5DCE3",
+            accentGold: "#D5AA28",
+            highlightBackground: "#0B2540",
+            highlightText: "#FFFFFF"
+        },
+        fontes: { principal: "Arial, sans-serif" },
+        estilo: {
+            raio: "16px",
+            sombra: "0 8px 24px rgba(0, 0, 0, 0.10)"
+        }
     }
 };
 
