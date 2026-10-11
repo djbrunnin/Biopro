@@ -435,8 +435,18 @@ function renderLocalizacao(config) {
         link.rel =
             "noopener noreferrer";
 
-        link.textContent =
-            "Ver localização";
+        link.className =
+            "bio-location-link";
+
+        const icone = document.createElement("span");
+        icone.className = "bio-location-icon";
+        icone.setAttribute("aria-hidden", "true");
+        icone.textContent = BIOPRO_ICONS.mapa;
+
+        const textoLink = document.createElement("span");
+        textoLink.textContent = "Ver localização";
+
+        link.append(icone, textoLink);
 
         section.appendChild(link);
 

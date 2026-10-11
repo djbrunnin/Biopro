@@ -328,12 +328,18 @@ img {
 
 
 .bio-location a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
 
     color:
         var(--color-primary);
 
     font-weight: 600;
+}
+
+.bio-location-icon {
+    line-height: 1;
 }
 
 
