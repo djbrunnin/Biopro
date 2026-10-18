@@ -257,6 +257,16 @@ window.addEventListener(
 
             iniciarAplicacao();
 
+            // Reaplica o tema recebido após renderizar para a prévia refletir
+            // imediatamente o JSON importado, mesmo se a página iniciou com o tema padrão.
+            if (
+                temaCustomizado &&
+                temaCustomizado.key === evento.data.config.tema &&
+                typeof aplicarTemaCompleto === "function"
+            ) {
+                aplicarTemaCompleto(temaCustomizado.key);
+            }
+
         }
 
     }
