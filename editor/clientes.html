@@ -80,6 +80,11 @@
             font-size: 14px;
         }
 
+        .cabecalho-acoes {
+            display: flex;
+            gap: 9px;
+        }
+
         .novo {
             border: 0;
             background: #66796b;
@@ -88,6 +93,60 @@
             padding: 13px 17px;
             font-weight: 600;
             white-space: nowrap;
+        }
+
+        .gerenciar-temas {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #66796b;
+            background: #ffffff;
+            color: #66796b;
+            border-radius: 12px;
+            padding: 13px 17px;
+            font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .filtros-clientes {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(180px, 240px);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .filtros-clientes label {
+            display: block;
+            color: #4d5b51;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .filtros-clientes input,
+        .filtros-clientes select {
+            width: 100%;
+            min-height: 44px;
+            margin-top: 6px;
+            padding: 10px 12px;
+            border: 1px solid #ddd8ce;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #26352d;
+            font: inherit;
+        }
+
+        .filtros-clientes input:focus,
+        .filtros-clientes select:focus {
+            outline: 2px solid #c8a96b;
+            outline-offset: 1px;
+        }
+
+        .resumo-clientes {
+            min-height: 18px;
+            margin: 0 0 12px;
+            color: #68736c;
+            font-size: 13px;
         }
 
         .lista {
@@ -194,7 +253,9 @@
 
         .modal {
             width: 100%;
-            max-width: 430px;
+            max-width: 560px;
+            max-height: 90vh;
+            overflow-y: auto;
             background: white;
             border-radius: 18px;
             padding: 24px;
@@ -217,6 +278,24 @@
             border: 1px solid #ddd8ce;
             border-radius: 10px;
             font-size: 15px;
+        }
+
+        .modal textarea {
+            width: 100%;
+            min-height: 75px;
+            margin-top: 7px;
+            padding: 13px;
+            border: 1px solid #ddd8ce;
+            border-radius: 10px;
+            font: inherit;
+            resize: vertical;
+        }
+
+        .modal-ajuda {
+            margin: 0;
+            color: #68736c;
+            font-size: 13px;
+            line-height: 1.45;
         }
 
         .modal-acoes {
@@ -248,6 +327,18 @@
 
             .novo {
                 width: 100%;
+            }
+
+            .cabecalho-acoes {
+                flex-direction: column;
+            }
+
+            .gerenciar-temas {
+                min-height: 44px;
+            }
+
+            .filtros-clientes {
+                grid-template-columns: 1fr;
             }
 
             .cliente-topo {
@@ -292,13 +383,16 @@
             </p>
         </div>
 
-        <button
-            class="novo"
-            id="novoCliente"
-            type="button"
-        >
-            + Novo cliente
-        </button>
+        <div class="cabecalho-acoes">
+            <a class="gerenciar-temas" href="./temas.html">Gerenciar temas</a>
+            <button
+                class="novo"
+                id="novoCliente"
+                type="button"
+            >
+                + Novo cliente
+            </button>
+        </div>
 
     </section>
 
@@ -306,7 +400,33 @@
     <div
         id="mensagem"
         class="mensagem"
+        role="status"
+        aria-live="polite"
     ></div>
+
+
+    <section class="filtros-clientes" aria-label="Busca e filtros dos clientes">
+        <label for="buscaClientes">
+            Buscar cliente
+            <input
+                id="buscaClientes"
+                type="search"
+                placeholder="Nome ou endereço da página"
+                autocomplete="off"
+            >
+        </label>
+
+        <label for="filtroPublicacao">
+            Situação
+            <select id="filtroPublicacao">
+                <option value="todos">Todos os clientes</option>
+                <option value="publicado">Publicados</option>
+                <option value="rascunho">Rascunhos</option>
+            </select>
+        </label>
+    </section>
+
+    <p id="resumoClientes" class="resumo-clientes" aria-live="polite"></p>
 
 
     <section
@@ -335,6 +455,56 @@
                 placeholder="Ex.: Studio Bella"
             >
         </label>
+
+        <label>
+            Descrição
+            <textarea
+                id="novoDescricao"
+                maxlength="240"
+                placeholder="O que esse negócio oferece?"
+            ></textarea>
+        </label>
+
+        <label>
+            WhatsApp
+            <input
+                id="novoWhatsApp"
+                type="tel"
+                inputmode="tel"
+                placeholder="(62) 99999-9999"
+            >
+        </label>
+
+        <label>
+            Instagram
+            <input
+                id="novoInstagram"
+                type="text"
+                placeholder="@perfil ou link do Instagram"
+            >
+        </label>
+
+        <label>
+            Endereço
+            <input
+                id="novoEndereco"
+                type="text"
+                placeholder="Rua, número, cidade"
+            >
+        </label>
+
+        <label>
+            Link do mapa
+            <input
+                id="novoMapa"
+                type="url"
+                placeholder="https://maps.app.goo.gl/..."
+            >
+        </label>
+
+        <p class="modal-ajuda">
+            Depois de criar, você poderá enviar a logo e a imagem de destaque no editor, com prévia antes de salvar.
+        </p>
 
         <div class="modal-acoes">
 

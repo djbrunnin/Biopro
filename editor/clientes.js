@@ -1,4 +1,5 @@
 let usuarioAtual = null;
+let clientesCarregados = [];
 
 
 /* =========================================
@@ -16,6 +17,15 @@ const modalFundo =
 
 const novoNome =
     document.getElementById("novoNome");
+
+const buscaClientes =
+    document.getElementById("buscaClientes");
+
+const filtroPublicacao =
+    document.getElementById("filtroPublicacao");
+
+const resumoClientes =
+    document.getElementById("resumoClientes");
 
 
 /* =========================================
@@ -156,10 +166,42 @@ function renderizarClientes(
     clientes
 ) {
 
+    clientesCarregados = clientes;
+
+    atualizarListaFiltrada();
+
+}
+
+
+function normalizarTextoBusca(valor) {
+    return String(valor || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLocaleLowerCase("pt-BR")
+        .trim();
+}
+
+
+function atualizarListaFiltrada() {
+
+    const termo = normalizarTextoBusca(buscaClientes.value);
+    const situacao = filtroPublicacao.value;
+    const filtrados = clientesCarregados.filter(cliente => {
+        const correspondeBusca = !termo || normalizarTextoBusca(
+            `${cliente.name || ""} ${cliente.slug || ""}`
+        ).includes(termo);
+
+        const correspondeSituacao = situacao === "todos" ||
+            (situacao === "publicado" && cliente.published) ||
+            (situacao === "rascunho" && !cliente.published);
+
+        return correspondeBusca && correspondeSituacao;
+    });
+
     lista.innerHTML = "";
 
 
-    if (!clientes.length) {
+    if (!clientesCarregados.length) {
 
         const vazio =
             document.createElement("div");
@@ -171,13 +213,27 @@ function renderizarClientes(
             "Nenhum cliente cadastrado.";
 
         lista.appendChild(vazio);
+        resumoClientes.textContent = "";
 
         return;
 
     }
 
 
-    clientes.forEach(
+    resumoClientes.textContent =
+        `Exibindo ${filtrados.length} de ${clientesCarregados.length} clientes.`;
+
+
+    if (!filtrados.length) {
+        const vazio = document.createElement("div");
+        vazio.className = "vazio";
+        vazio.textContent = "Nenhum cliente corresponde à busca ou ao filtro.";
+        lista.appendChild(vazio);
+        return;
+    }
+
+
+    filtrados.forEach(
         cliente => {
 
             lista.appendChild(
@@ -190,6 +246,10 @@ function renderizarClientes(
     );
 
 }
+
+
+buscaClientes.addEventListener("input", atualizarListaFiltrada);
+filtroPublicacao.addEventListener("change", atualizarListaFiltrada);
 
 
 /* =========================================
@@ -327,6 +387,19 @@ function criarCardCliente(
             );
 
 
+    const duplicar =
+        document.createElement("button");
+
+    duplicar.type =
+        "button";
+
+    duplicar.textContent =
+        "Duplicar";
+
+    duplicar.onclick =
+        () => duplicarCliente(cliente, duplicar);
+
+
     acoes.appendChild(
         editar
     );
@@ -337,6 +410,10 @@ function criarCardCliente(
 
     acoes.appendChild(
         publicar
+    );
+
+    acoes.appendChild(
+        duplicar
     );
 
 
@@ -351,6 +428,59 @@ function criarCardCliente(
 
     return card;
 
+}
+
+
+async function duplicarCliente(cliente, botao) {
+    botao.disabled = true;
+    botao.textContent = "Duplicando...";
+    mostrarMensagem(`Duplicando ${cliente.name || "cliente"}...`);
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("clients")
+            .select("config")
+            .eq("id", cliente.id)
+            .eq("owner_id", usuarioAtual.id)
+            .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data) {
+            throw new Error("Não foi possível carregar a configuração do cliente.");
+        }
+
+        const nomeCopia = `${cliente.name || "Cliente"} (cópia)`;
+        const configCopia = JSON.parse(JSON.stringify(
+            data.config && typeof data.config === "object" && !Array.isArray(data.config)
+                ? data.config
+                : {}
+        ));
+
+        if (
+            !configCopia.perfil ||
+            typeof configCopia.perfil !== "object" ||
+            Array.isArray(configCopia.perfil)
+        ) {
+            configCopia.perfil = {};
+        }
+        configCopia.perfil.nome = nomeCopia;
+
+        await inserirClienteComSlug(nomeCopia, configCopia, false);
+
+        buscaClientes.value = nomeCopia;
+        filtroPublicacao.value = "todos";
+        await carregarClientes();
+        mostrarMensagem("Cópia criada como rascunho. Revise os dados antes de publicar.");
+    } catch (erro) {
+        console.error(erro);
+        mostrarMensagem(erro.message || "Não foi possível duplicar o cliente.");
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "Duplicar";
+    }
 }
 
 
@@ -489,6 +619,57 @@ function gerarSlug(nome) {
 }
 
 
+async function inserirClienteComSlug(nome, config, publicado = false) {
+    const slugBase = gerarSlug(nome);
+
+    for (let numero = 1; numero <= 100; numero++) {
+        const slug = numero === 1
+            ? slugBase
+            : `${slugBase}-${numero}`;
+
+        const { data: existente, error: erroBusca } = await supabaseClient
+            .from("clients")
+            .select("slug")
+            .eq("slug", slug)
+            .eq("owner_id", usuarioAtual.id)
+            .limit(1);
+
+        if (erroBusca) {
+            throw erroBusca;
+        }
+
+        if (existente?.length) {
+            continue;
+        }
+
+        config.id = slug;
+
+        const resultado = await supabaseClient
+            .from("clients")
+            .insert({
+                owner_id: usuarioAtual.id,
+                slug,
+                name: nome,
+                config,
+                published: publicado
+            })
+            .select()
+            .single();
+
+        if (!resultado.error) {
+            return resultado.data;
+        }
+
+        // Outra criação pode ocupar o slug depois da consulta.
+        if (resultado.error.code !== "23505") {
+            throw resultado.error;
+        }
+    }
+
+    throw new Error("Não foi possível encontrar um slug livre para este cliente.");
+}
+
+
 /* =========================================
    CRIAR CLIENTE
 ========================================= */
@@ -533,12 +714,7 @@ async function criarCliente() {
 
     try {
 
-        const slugBase = gerarSlug(nome);
-
-
         const config = {
-
-            id: slugBase,
 
             tema: "botanic",
 
@@ -668,56 +844,7 @@ async function criarCliente() {
         };
 
 
-        let data = null;
-
-        for (let numero = 1; numero <= 100; numero++) {
-            const slug = numero === 1
-                ? slugBase
-                : `${slugBase}-${numero}`;
-
-            const { data: existente, error: erroBusca } = await supabaseClient
-                .from("clients")
-                .select("slug")
-                .eq("slug", slug)
-                .eq("owner_id", usuarioAtual.id)
-                .limit(1);
-
-            if (erroBusca) {
-                throw erroBusca;
-            }
-
-            if (existente?.length) {
-                continue;
-            }
-
-            config.id = slug;
-
-            const resultado = await supabaseClient
-                .from("clients")
-                .insert({
-                    owner_id: usuarioAtual.id,
-                    slug,
-                    name: nome,
-                    config,
-                    published: false
-                })
-                .select()
-                .single();
-
-            if (!resultado.error) {
-                data = resultado.data;
-                break;
-            }
-
-            // Uma inserção simultânea pode ocupar o slug depois da consulta.
-            if (resultado.error.code !== "23505") {
-                throw resultado.error;
-            }
-        }
-
-        if (!data) {
-            throw new Error("Não foi possível encontrar um slug livre para este cliente.");
-        }
+        const data = await inserirClienteComSlug(nome, config, false);
 
 
         fecharModal();
