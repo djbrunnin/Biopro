@@ -18,6 +18,21 @@ const modalFundo =
 const novoNome =
     document.getElementById("novoNome");
 
+const novoDescricao =
+    document.getElementById("novoDescricao");
+
+const novoWhatsApp =
+    document.getElementById("novoWhatsApp");
+
+const novoInstagram =
+    document.getElementById("novoInstagram");
+
+const novoEndereco =
+    document.getElementById("novoEndereco");
+
+const novoMapa =
+    document.getElementById("novoMapa");
+
 const buscaClientes =
     document.getElementById("buscaClientes");
 
@@ -558,6 +573,11 @@ document
         () => {
 
             novoNome.value = "";
+            novoDescricao.value = "";
+            novoWhatsApp.value = "";
+            novoInstagram.value = "";
+            novoEndereco.value = "";
+            novoMapa.value = "";
 
             modalFundo.classList.add(
                 "aberto"
@@ -616,6 +636,77 @@ function gerarSlug(nome) {
         .replace(/^-+|-+$/g, "")
         .slice(0, 36)
         .replace(/-+$/g, "") || "cliente";
+}
+
+
+function criarLinkWhatsApp(valor) {
+    const informado = valor.trim();
+    if (!informado) return "";
+
+    let telefone = informado.replace(/\D/g, "");
+    if (telefone.startsWith("0")) {
+        telefone = telefone.slice(1);
+    }
+
+    if (telefone.length === 10 || telefone.length === 11) {
+        telefone = `55${telefone}`;
+    }
+
+    if (!/^55\d{10,11}$/.test(telefone)) {
+        throw new Error("Informe um telefone com DDD válido para o WhatsApp.");
+    }
+
+    return `https://wa.me/${telefone}`;
+}
+
+
+function criarLinkInstagram(valor) {
+    const informado = valor.trim();
+    if (!informado) return "";
+
+    let usuario = informado.replace(/^@/, "");
+    if (/^(www\.)?instagram\.com\//i.test(usuario)) {
+        usuario = `https://${usuario}`;
+    }
+
+    if (/^https?:\/\//i.test(usuario)) {
+        let url;
+        try {
+            url = new URL(usuario);
+        } catch {
+            throw new Error("Informe um usuário ou link válido do Instagram.");
+        }
+        const host = url.hostname.toLowerCase();
+        if (!['instagram.com', 'www.instagram.com', 'm.instagram.com'].includes(host)) {
+            throw new Error("Informe um usuário ou link válido do Instagram.");
+        }
+        usuario = url.pathname.split("/").filter(Boolean)[0] || "";
+    }
+
+    if (!/^[A-Za-z0-9._]{1,30}$/.test(usuario)) {
+        throw new Error("Informe um usuário ou link válido do Instagram.");
+    }
+
+    return `https://www.instagram.com/${usuario}/`;
+}
+
+
+function validarLinkMapa(valor) {
+    const informado = valor.trim();
+    if (!informado) return "";
+
+    let url;
+    try {
+        url = new URL(informado);
+    } catch {
+        throw new Error("Informe um link válido para o mapa.");
+    }
+
+    if (!['http:', 'https:'].includes(url.protocol)) {
+        throw new Error("O link do mapa deve começar com http:// ou https://.");
+    }
+
+    return url.href;
 }
 
 
@@ -714,6 +805,12 @@ async function criarCliente() {
 
     try {
 
+        const descricao = novoDescricao.value.trim();
+        const whatsapp = criarLinkWhatsApp(novoWhatsApp.value);
+        const instagram = criarLinkInstagram(novoInstagram.value);
+        const endereco = novoEndereco.value.trim();
+        const mapa = validarLinkMapa(novoMapa.value);
+
         const config = {
 
             tema: "botanic",
@@ -726,8 +823,7 @@ async function criarCliente() {
 
                 nome: nome,
 
-                descricao:
-                    "Beleza, cuidado e autoestima em cada detalhe.",
+                descricao,
 
                 logo: ""
 
@@ -751,11 +847,10 @@ async function criarCliente() {
                     icone:
                         "whatsapp",
 
-                    url:
-                        "",
+                    url: whatsapp,
 
                     ativo:
-                        true
+                        Boolean(whatsapp)
 
                 },
 
@@ -767,11 +862,10 @@ async function criarCliente() {
                     icone:
                         "instagram",
 
-                    url:
-                        "",
+                    url: instagram,
 
                     ativo:
-                        true
+                        Boolean(instagram)
 
                 }
 
@@ -783,11 +877,11 @@ async function criarCliente() {
 
             localizacao: {
 
-                ativo: true,
+                ativo: Boolean(endereco || mapa),
 
-                endereco: "",
+                endereco,
 
-                mapa: ""
+                mapa
 
             },
 
@@ -813,9 +907,9 @@ async function criarCliente() {
 
                 portfolio: false,
 
-                localizacao: true,
+                localizacao: Boolean(endereco || mapa),
 
-                redes: true,
+                redes: false,
 
                 rodape: true
 

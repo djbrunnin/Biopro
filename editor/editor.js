@@ -176,6 +176,8 @@ async function carregarConfiguracao() {
         CONFIG =
             data.config || {};
 
+        await carregarTemasPersonalizados();
+
         PUBLICADO =
             data.published === true;
 
@@ -241,6 +243,54 @@ function preencherEditor() {
 
     preencherOrdem();
 
+}
+
+
+async function carregarTemasPersonalizados() {
+    const { data, error } = await supabaseClient
+        .from("biopro_themes")
+        .select("theme_key, name, theme")
+        .eq("is_active", true)
+        .order("name", { ascending: true });
+
+    if (error) {
+        console.warn("Temas personalizados indisponíveis:", error.message);
+        preservarTemaSelecionado(CONFIG.tema);
+        return;
+    }
+
+    data?.forEach(item => {
+        if (
+            !/^[a-z][a-zA-Z0-9]{0,39}$/.test(item.theme_key || "") ||
+            !item.theme ||
+            typeof item.theme !== "object"
+        ) {
+            return;
+        }
+
+        BIOPRO_THEMES[item.theme_key] = item.theme;
+
+        if (!Array.from(tema.options).some(opcao => opcao.value === item.theme_key)) {
+            const opcao = document.createElement("option");
+            opcao.value = item.theme_key;
+            opcao.textContent = item.name;
+            tema.appendChild(opcao);
+        }
+    });
+
+    preservarTemaSelecionado(CONFIG.tema);
+}
+
+
+function preservarTemaSelecionado(chave) {
+    if (!chave || Array.from(tema.options).some(opcao => opcao.value === chave)) {
+        return;
+    }
+
+    const opcao = document.createElement("option");
+    opcao.value = chave;
+    opcao.textContent = `${chave} (tema indisponível)`;
+    tema.appendChild(opcao);
 }
 
 
@@ -1287,7 +1337,10 @@ function enviarConfiguracaoPreview() {
     preview.contentWindow.postMessage(
         {
             tipo: "BIOPRO_PREVIEW",
-            config: CONFIG
+            config: CONFIG,
+            temaCustomizado: BIOPRO_THEMES[CONFIG.tema]
+                ? { key: CONFIG.tema, dados: BIOPRO_THEMES[CONFIG.tema] }
+                : null
         },
         window.location.origin
     );

@@ -3,9 +3,9 @@
 - **Objetivo:** Criar mini sites atraentes para links da bio do Instagram, reutilizando um motor para vários clientes.
 - **Stack:** HTML, CSS, JavaScript, GitHub Pages e Supabase.
 - **Arquitetura:** Site estático multi-cliente; dados/configuração no Supabase; painel autenticado para gerenciar clientes e editar páginas.
-- **Funcionalidades:** Temas (incluindo Climatização & Energia), links, serviços, upload de logo, destaque e portfólio para Supabase Storage, localização, redes sociais, editor, preview, publicação e gerenciador com busca, filtros e duplicação de clientes.
-- **Estado atual:** Gerenciador permite localizar por nome/slug, filtrar publicados e rascunhos e duplicar um cliente como rascunho. Editor envia logo (`{cliente}/logo/`), destaque e fotos do portfólio ao bucket `biopro-assets`; `PROMPT_CRIACAO_TEMA.md` define formato inicial para temas.
+- **Funcionalidades:** Catálogo estático e gerenciador de temas personalizados via JSON, com validação e prévia; gerenciador de clientes com busca, filtros, duplicação e cadastro inicial de contatos/localização; editor com uploads e prévia.
+- **Estado atual:** Cadastro inicial coleta descrição, WhatsApp, Instagram e localização e abre o editor para envio de logo/destaque e prévia. Importador de temas valida sombras `rgba` coloridas em formato simples; a tabela `biopro_themes` precisa ser criada aplicando a migração SQL no Supabase.
 - **Decisões importantes:** Um motor compartilhado para todos os clientes; novos clientes recebem slugs legíveis e números apenas em caso de duplicidade; iniciar com hospedagem gratuita do GitHub Pages e manter suporte a domínio próprio no futuro.
-- **Problemas conhecidos:** Não há arquivos SQL das políticas Supabase no repositório, então RLS, Storage e a constraint global de slug não foram confirmados. O catálogo de temas permanece estático no código.
+- **Problemas conhecidos:** As políticas RLS/Storage de clientes e unicidade global do slug ainda precisam ser confirmadas no Supabase. O gerenciador de temas depende da migração `supabase/migrations/20261018_create_biopro_themes.sql` ser aplicada.
 - **Riscos:** A chave publishable do Supabase é pública por natureza; a segurança depende das políticas RLS/Storage e de slug único, que precisam ser verificadas no banco.
-- **Próximo passo:** Criar importação de temas JSON com validação e prévia; confirmar RLS, políticas de Storage e unicidade global de slug no Supabase.
+- **Próximo passo:** Aplicar a migração de temas no Supabase e validar importação, prévia e renderização pública; depois confirmar RLS/Storage e unicidade global de slug.

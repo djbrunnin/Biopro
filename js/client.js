@@ -70,6 +70,7 @@ async function carregarCliente() {
             window.BIOPRO_CONFIG =
                 data.config;
 
+            await carregarTemaPersonalizado(data.config.tema);
 
             iniciarBioPro();
 
@@ -101,6 +102,37 @@ async function carregarCliente() {
 
     }
 
+}
+
+
+async function carregarTemaPersonalizado(chave) {
+    if (
+        typeof chave !== "string" ||
+        !/^[a-z][a-zA-Z0-9]{0,39}$/.test(chave) ||
+        typeof BIOPRO_THEMES === "undefined" ||
+        BIOPRO_THEMES[chave]
+    ) {
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("biopro_themes")
+            .select("theme_key, theme")
+            .eq("theme_key", chave)
+            .eq("is_active", true)
+            .maybeSingle();
+
+        if (error) {
+            throw error;
+        }
+
+        if (data?.theme_key === chave && data.theme && typeof data.theme === "object") {
+            BIOPRO_THEMES[chave] = data.theme;
+        }
+    } catch (erro) {
+        console.warn("Não foi possível carregar o tema personalizado:", erro.message);
+    }
 }
 
 
@@ -199,6 +231,18 @@ window.addEventListener(
             Array.isArray(evento.data.config)
         ) {
             return;
+        }
+
+        const temaCustomizado = evento.data.temaCustomizado;
+        if (
+            temaCustomizado &&
+            temaCustomizado.key === evento.data.config.tema &&
+            /^[a-z][a-zA-Z0-9]{0,39}$/.test(temaCustomizado.key) &&
+            temaCustomizado.dados &&
+            typeof temaCustomizado.dados === "object" &&
+            typeof BIOPRO_THEMES !== "undefined"
+        ) {
+            BIOPRO_THEMES[temaCustomizado.key] = temaCustomizado.dados;
         }
 
 
