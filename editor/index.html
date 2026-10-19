@@ -100,6 +100,25 @@
 
             <p id="logoStatus" class="upload-status" role="status" aria-live="polite"></p>
 
+            <div class="hub-config">
+                <label class="check-item">
+                    <input id="exibirNoHub" type="checkbox">
+                    Mostrar este cliente no Hub de serviços
+                </label>
+                <label>
+                    Imagem do cartão no Hub
+                    <select id="imagemHub">
+                        <option value="logo">Logo do cliente</option>
+                        <option value="destaque">Imagem de destaque</option>
+                        <option value="portfolio">Primeira foto do portfólio</option>
+                    </select>
+                </label>
+                <label>
+                    Descrição curta para o Hub
+                    <textarea id="descricaoHub" maxlength="180" placeholder="Se ficar vazio, será usada a descrição do perfil."></textarea>
+                </label>
+            </div>
+
         </div>
 
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Conheça os serviços e empresas que fazem parte do Hub BioPro.">
+    <meta name="theme-color" content="#173d36">
+    <title>Hub de serviços | BioPro</title>
+    <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+    <header class="hub-header">
+        <a class="hub-brand" href="./" aria-label="BioPro — Hub de serviços">
+            <span class="hub-brand-mark" aria-hidden="true">B</span>
+            <span><strong>BioPro</strong><small>Hub de serviços</small></span>
+        </a>
+        <a class="hub-header-link" href="https://api.whatsapp.com/send/?phone=5562991938647&amp;text=Ol%C3%A1%21+Quero+criar+minha+mini+pagina+para+bio+do+meu+instagram&amp;type=phone_number&amp;app_absent=0" target="_blank" rel="noopener noreferrer">Criar minha página</a>
+    </header>
+
+    <main class="hub-main">
+        <section class="hub-intro" aria-labelledby="hubTitle">
+            <p class="hub-eyebrow">Negócios locais, em um só lugar</p>
+            <h1 id="hubTitle">Encontre serviços e profissionais</h1>
+            <p>Explore as empresas do Hub BioPro e acesse a página de cada negócio.</p>
+            <label class="hub-search-label" for="hubSearch">Buscar empresa ou serviço</label>
+            <input id="hubSearch" class="hub-search" type="search" placeholder="Digite um nome ou serviço" autocomplete="off">
+        </section>
+
+        <p id="hubStatus" class="hub-status" role="status" aria-live="polite">Carregando empresas...</p>
+        <section id="hubCards" class="hub-cards" aria-label="Empresas e serviços"></section>
+    </main>
+
+    <footer class="hub-footer">BioPro <span>•</span> Páginas profissionais para negócios locais</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase.js"></script>
+    <script src="hub.js"></script>
+</body>
+</html>

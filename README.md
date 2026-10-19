@@ -16,3 +16,7 @@ No gerenciador, o cadastro inicial aceita descrição, WhatsApp, Instagram e loc
 O editor permite personalizar o texto, ícone e cores dos botões de contato, além de adicionar, editar e remover redes sociais. O checklist aponta nome, descrição, logo e botão de contato ausentes; a publicação fica bloqueada até os itens essenciais estarem preenchidos. No gerenciador, páginas publicadas têm um link de QR Code em PNG de alta resolução para salvar ou imprimir. A geração usa o serviço externo `api.qrserver.com` e envia somente a URL pública da página.
 
 Métricas de visualizações e cliques continuam planejadas para uma etapa futura.
+
+## Hub público de serviços
+
+O diretório `hub/` contém a vitrine pública com busca. Ela lista somente clientes publicados, permite ocultar um cliente no editor e usa uma imagem já existente (logo, destaque ou primeira foto do portfólio) para evitar novos uploads. A descrição curta pode ser específica do Hub ou reutilizar a descrição do perfil. O cabeçalho usa uma marca provisória em texto; a identidade visual final da BioPro ainda será criada.

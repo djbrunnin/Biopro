@@ -67,6 +67,9 @@ const linksEditor =
 
 const redesEditor = document.getElementById("redesEditor");
 const checklistPublicacao = document.getElementById("checklistPublicacao");
+const exibirNoHub = document.getElementById("exibirNoHub");
+const imagemHub = document.getElementById("imagemHub");
+const descricaoHub = document.getElementById("descricaoHub");
 
 const servicosEditor =
     document.getElementById("servicosEditor");
@@ -228,6 +231,11 @@ function preencherEditor() {
 
     preencherLogo();
     preencherDestaque();
+
+    const hub = CONFIG.hub && typeof CONFIG.hub === "object" ? CONFIG.hub : {};
+    exibirNoHub.checked = hub.mostrar !== false;
+    imagemHub.value = ["logo", "destaque", "portfolio"].includes(hub.imagem) ? hub.imagem : "logo";
+    descricaoHub.value = typeof hub.descricao === "string" ? hub.descricao : "";
 
     endereco.value =
         CONFIG.localizacao?.endereco || "";
@@ -1252,6 +1260,13 @@ function atualizarConfiguracao() {
 
     CONFIG.tema =
         tema.value;
+
+    CONFIG.hub = {
+        ...(CONFIG.hub && typeof CONFIG.hub === "object" ? CONFIG.hub : {}),
+        mostrar: exibirNoHub.checked,
+        imagem: imagemHub.value,
+        descricao: descricaoHub.value.trim()
+    };
 
 
     CONFIG.localizacao =
