@@ -95,6 +95,13 @@ function renderizarLinks(lista) {
 
                 link.href = obterUrlSegura(linkConfig.url);
 
+                if (/^#[0-9a-f]{6}$/i.test(linkConfig.corFundo || "")) {
+                    link.style.backgroundColor = linkConfig.corFundo;
+                }
+                if (/^#[0-9a-f]{6}$/i.test(linkConfig.corTexto || "")) {
+                    link.style.color = linkConfig.corTexto;
+                }
+
 
                 /* =========================
                    ÍCONE
@@ -112,6 +119,10 @@ function renderizarLinks(lista) {
                         BIOPRO_ICONS[
                             linkConfig.icone
                         ] || "•";
+
+                    if (/^#[0-9a-f]{6}$/i.test(linkConfig.corTexto || "")) {
+                        icone.style.color = linkConfig.corTexto;
+                    }
 
                     link.appendChild(icone);
 

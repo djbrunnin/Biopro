@@ -65,6 +65,9 @@ const mapa =
 const linksEditor =
     document.getElementById("linksEditor");
 
+const redesEditor = document.getElementById("redesEditor");
+const checklistPublicacao = document.getElementById("checklistPublicacao");
+
 const servicosEditor =
     document.getElementById("servicosEditor");
 
@@ -234,6 +237,7 @@ function preencherEditor() {
 
 
     preencherLinks();
+    preencherRedes();
 
     preencherServicos();
 
@@ -242,6 +246,7 @@ function preencherEditor() {
     preencherComponentes();
 
     preencherOrdem();
+    atualizarChecklistPublicacao();
 
 }
 
@@ -518,14 +523,59 @@ function criarEditorLink(
         link.url || "";
 
 
-    const iconeInput =
-        document.createElement("input");
+    const iconeInput = document.createElement("select");
+    [
+        ["", "Sem ícone"], ["whatsapp", "WhatsApp"], ["instagram", "Instagram"],
+        ["facebook", "Facebook"], ["tiktok", "TikTok"], ["servicos", "Serviços"],
+        ["mapa", "Mapa"], ["telefone", "Telefone"], ["site", "Site"],
+        ["agenda", "Agendamento"], ["contato", "E-mail"]
+    ].forEach(([valor, rotulo]) => {
+        const opcao = document.createElement("option");
+        opcao.value = valor;
+        opcao.textContent = rotulo;
+        iconeInput.appendChild(opcao);
+    });
+    if (link.icone && !Array.from(iconeInput.options).some(opcao => opcao.value === link.icone)) {
+        const opcaoAtual = document.createElement("option");
+        opcaoAtual.value = link.icone;
+        opcaoAtual.textContent = `Ícone atual: ${link.icone}`;
+        iconeInput.appendChild(opcaoAtual);
+    }
+    iconeInput.value = link.icone || "";
 
-    iconeInput.placeholder =
-        "Ícone";
+    const coresAtivas = /^#[0-9a-f]{6}$/i.test(link.corFundo || "") || /^#[0-9a-f]{6}$/i.test(link.corTexto || "");
+    const personalizarCores = document.createElement("input");
+    personalizarCores.type = "checkbox";
+    personalizarCores.className = "personalizar-cores-link";
+    personalizarCores.checked = coresAtivas;
+    const rotuloPersonalizar = document.createElement("label");
+    rotuloPersonalizar.className = "check-item";
+    rotuloPersonalizar.append(personalizarCores, document.createTextNode(" Personalizar cores do botão"));
 
-    iconeInput.value =
-        link.icone || "";
+    const corFundo = document.createElement("input");
+    corFundo.type = "color";
+    corFundo.className = "cor-fundo-link";
+    corFundo.value = /^#[0-9a-f]{6}$/i.test(link.corFundo || "") ? link.corFundo : "#ffffff";
+    corFundo.setAttribute("aria-label", `Cor de fundo do botão ${index + 1}`);
+    const rotuloFundo = document.createElement("label");
+    rotuloFundo.textContent = "Cor do botão";
+    rotuloFundo.hidden = !coresAtivas;
+    rotuloFundo.appendChild(corFundo);
+
+    const corTexto = document.createElement("input");
+    corTexto.type = "color";
+    corTexto.className = "cor-texto-link";
+    corTexto.value = /^#[0-9a-f]{6}$/i.test(link.corTexto || "") ? link.corTexto : "#26352d";
+    corTexto.setAttribute("aria-label", `Cor do texto do botão ${index + 1}`);
+    const rotuloTexto = document.createElement("label");
+    rotuloTexto.textContent = "Cor do texto";
+    rotuloTexto.hidden = !coresAtivas;
+    rotuloTexto.appendChild(corTexto);
+
+    personalizarCores.addEventListener("change", () => {
+        rotuloFundo.hidden = !personalizarCores.checked;
+        rotuloTexto.hidden = !personalizarCores.checked;
+    });
 
 
     item.appendChild(header);
@@ -535,6 +585,9 @@ function criarEditorLink(
     item.appendChild(urlInput);
 
     item.appendChild(iconeInput);
+    item.appendChild(rotuloPersonalizar);
+    item.appendChild(rotuloFundo);
+    item.appendChild(rotuloTexto);
 
     linksEditor.appendChild(item);
 
@@ -559,6 +612,47 @@ document
 
         }
     );
+
+
+function preencherRedes() {
+    redesEditor.replaceChildren();
+    const redes = CONFIG.redes && typeof CONFIG.redes === "object" ? CONFIG.redes : {};
+    Object.entries(redes).forEach(([nomeRede, url]) => criarEditorRede(nomeRede, url));
+}
+
+
+function criarEditorRede(nomeRede = "", url = "") {
+    const item = document.createElement("div");
+    item.className = "editor-item rede-editor-item";
+
+    const header = document.createElement("div");
+    header.className = "editor-item-header";
+    const titulo = document.createElement("strong");
+    titulo.textContent = "Perfil social";
+    const remover = document.createElement("button");
+    remover.type = "button";
+    remover.className = "remover";
+    remover.textContent = "Remover";
+    remover.addEventListener("click", () => item.remove());
+    header.append(titulo, remover);
+
+    const nomeInput = document.createElement("input");
+    nomeInput.placeholder = "Rede social (ex.: Instagram)";
+    nomeInput.value = nomeRede;
+    nomeInput.setAttribute("aria-label", "Nome da rede social");
+
+    const urlInput = document.createElement("input");
+    urlInput.type = "url";
+    urlInput.placeholder = "https://...";
+    urlInput.value = typeof url === "string" ? url : "";
+    urlInput.setAttribute("aria-label", `Link de ${nomeRede || "rede social"}`);
+
+    item.append(header, nomeInput, urlInput);
+    redesEditor.appendChild(item);
+}
+
+
+document.getElementById("adicionarRede").addEventListener("click", () => criarEditorRede());
 
 
 /* =========================================
@@ -1066,7 +1160,15 @@ function coletarLinks() {
                     inputs[1]?.value || "",
 
                 icone:
-                    inputs[2]?.value || "",
+                    item.querySelector("select")?.value || "",
+
+                corFundo: item.querySelector(".personalizar-cores-link")?.checked
+                    ? item.querySelector(".cor-fundo-link")?.value.toUpperCase() || ""
+                    : "",
+
+                corTexto: item.querySelector(".personalizar-cores-link")?.checked
+                    ? item.querySelector(".cor-texto-link")?.value.toUpperCase() || ""
+                    : "",
 
                 ativo: true
 
@@ -1167,6 +1269,15 @@ function atualizarConfiguracao() {
     CONFIG.links =
         coletarLinks();
 
+    CONFIG.redes = Object.fromEntries(
+        [...redesEditor.children]
+            .map(item => {
+                const inputs = item.querySelectorAll("input");
+                return [inputs[0]?.value.trim() || "", inputs[1]?.value.trim() || ""];
+            })
+            .filter(([nomeRede, url]) => nomeRede && url)
+    );
+
 
     CONFIG.servicos =
         coletarServicos();
@@ -1217,6 +1328,8 @@ function atualizarConfiguracao() {
 
     CONFIG.ordem =
         coletarOrdem();
+
+    atualizarChecklistPublicacao();
 
 
     return CONFIG;
@@ -1354,6 +1467,18 @@ function atualizarPreviewDoEditor() {
     atualizarConfiguracao();
     atualizarPreview();
 
+}
+
+
+function atualizarChecklistPublicacao() {
+    if (!checklistPublicacao || !CONFIG || typeof obterChecklistPublicacao !== "function") return;
+    checklistPublicacao.replaceChildren();
+    obterChecklistPublicacao(CONFIG, nome?.value || "").forEach(item => {
+        const linha = document.createElement("li");
+        linha.className = item.ok ? "checklist-ok" : "checklist-pendente";
+        linha.textContent = `${item.ok ? "✓" : "○"} ${item.nome}`;
+        checklistPublicacao.appendChild(linha);
+    });
 }
 
 

@@ -134,7 +134,7 @@ async function carregarClientes() {
         } = await supabaseClient
             .from("clients")
             .select(
-                "id, slug, name, published, updated_at"
+                "id, slug, name, config, published, updated_at"
             )
             .eq(
                 "owner_id",
@@ -382,6 +382,23 @@ function criarCardCliente(
     visualizar.textContent =
         "Visualizar";
 
+    if (cliente.published) {
+        const urlPublica = new URL("../", window.location.href);
+        urlPublica.searchParams.set("cliente", cliente.slug);
+        const qrUrl = new URL("https://api.qrserver.com/v1/create-qr-code/");
+        qrUrl.searchParams.set("size", "600x600");
+        qrUrl.searchParams.set("format", "png");
+        qrUrl.searchParams.set("data", urlPublica.href);
+
+        const qr = document.createElement("a");
+        qr.href = qrUrl.href;
+        qr.target = "_blank";
+        qr.rel = "noopener noreferrer";
+        qr.textContent = "QR Code";
+        qr.title = "Abrir o QR Code em alta resolução para salvar ou imprimir";
+        acoes.appendChild(qr);
+    }
+
 
     const publicar =
         document.createElement("button");
@@ -509,6 +526,14 @@ async function alterarPublicacao(
 
     const novoEstado =
         !cliente.published;
+
+    if (novoEstado) {
+        const pendencias = itensObrigatoriosPendentes(cliente.config, cliente.name);
+        if (pendencias.length) {
+            mostrarMensagem(`Complete antes de publicar: ${pendencias.join(", ")}. Abra “Editar” para corrigir.`);
+            return;
+        }
+    }
 
 
     mostrarMensagem(

@@ -170,6 +170,8 @@
 
             <h2>Links</h2>
 
+            <p class="helper">Personalize o texto e o ícone de cada botão. As cores seguem o tema; você pode substituí-las individualmente com bom contraste.</p>
+
             <div id="linksEditor"></div>
 
             <button
@@ -179,6 +181,16 @@
             >
                 + Adicionar link
             </button>
+
+        </div>
+
+
+        <div class="editor-card">
+
+            <h2>Redes sociais</h2>
+            <p class="helper">Adicione ou edite os perfis que serão exibidos na página.</p>
+            <div id="redesEditor"></div>
+            <button id="adicionarRede" class="button-secondary" type="button">+ Adicionar rede social</button>
 
         </div>
 
@@ -323,6 +335,15 @@
 
         <div class="editor-card">
 
+            <h2>Checklist de publicação</h2>
+            <p class="helper">Confira os itens essenciais antes de publicar a página.</p>
+            <ul id="checklistPublicacao" class="checklist-publicacao" aria-live="polite"></ul>
+
+        </div>
+
+
+        <div class="editor-card">
+
             <h2>Ordem dos componentes</h2>
 
             <p class="helper">
@@ -386,6 +407,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/supabase.js"></script>
 <script src="../themes/themes.js"></script>
+<script src="../js/publication-checklist.js"></script>
 <script src="editor.js"></script>
 
 </body>

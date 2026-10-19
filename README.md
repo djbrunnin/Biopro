@@ -10,3 +10,9 @@ Depois da migração, importe ou cole o JSON do tema, valide-o, confira a prévi
 ## Cadastro de clientes
 
 No gerenciador, o cadastro inicial aceita descrição, WhatsApp, Instagram e localização. Após salvar, o BioPro abre o editor, onde é possível enviar a logo e a imagem de destaque e acompanhar a prévia antes de salvar as alterações.
+
+## Publicação e divulgação
+
+O editor permite personalizar o texto, ícone e cores dos botões de contato, além de adicionar, editar e remover redes sociais. O checklist aponta nome, descrição, logo e botão de contato ausentes; a publicação fica bloqueada até os itens essenciais estarem preenchidos. No gerenciador, páginas publicadas têm um link de QR Code em PNG de alta resolução para salvar ou imprimir. A geração usa o serviço externo `api.qrserver.com` e envia somente a URL pública da página.
+
+Métricas de visualizações e cliques continuam planejadas para uma etapa futura.
